@@ -9,6 +9,11 @@
 - **修改响应头**: 允许开发者修改HTTP响应头，便于调试和测试。
 - **一键破解网页复制限制**: 解除网页上的复制限制，方便内容获取和分析。
 
+## 图示
+![Icon](https://github.com/fred-hu/images/raw/main/icon.png)
+![Icon](https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.21.59.png)
+![Icon](https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.22.16.png)
+
 ## 安装
 1. 下载插件压缩包。
 2. 打开浏览器，进入扩展程序管理页面。
