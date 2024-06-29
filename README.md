@@ -1,33 +1,48 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+# 多功能开发者工具浏览器插件
 
-## Getting Started
+## 简介
+这是一款集多个开发者工具于一身的浏览器插件，旨在提高开发者的工作效率。插件提供了MOCK数据、重定向、修改响应头、一键破解网页复制限制等功能。
 
-First, run the development server:
+## 功能
+- **MOCK数据**: 允许开发者模拟API响应数据，方便前端开发和测试。
+- **重定向**: 支持URL重定向，方便开发者在本地环境和生产环境之间切换。
+- **修改响应头**: 允许开发者修改HTTP响应头，便于调试和测试。
+- **一键破解网页复制限制**: 解除网页上的复制限制，方便内容获取和分析。
 
-```bash
-pnpm dev
-# or
-npm run dev
-```
+## 安装
+1. 下载插件压缩包。
+2. 打开浏览器，进入扩展程序管理页面。
+3. 点击“加载已解压的扩展程序”，选择插件文件夹进行安装。
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+## 使用方法
+### MOCK数据
+1. 打开插件设置页面。
+2. 进入“MOCK数据”选项卡。
+3. 添加或编辑API接口和对应的模拟数据。
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
+### 重定向
+1. 打开插件设置页面。
+2. 进入“重定向”选项卡。
+3. 添加或编辑URL重定向规则。
 
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
+### 修改响应头
+1. 打开插件设置页面。
+2. 进入“修改响应头”选项卡。
+3. 添加或编辑HTTP响应头规则。
 
-## Making production build
+### 一键破解网页复制限制
+1. 访问需要破解复制限制的网页。
+2. 点击插件图标，选择“一键破解网页复制限制”功能。
 
-Run the following:
+## 贡献
+欢迎对本项目进行贡献！如果你有任何建议或发现了问题，请提交Issue或Pull Request。
 
-```bash
-pnpm build
-# or
-npm run build
-```
+## 许可证
+本项目基于MIT许可证开源，详细信息请参见LICENSE文件。
 
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
+## 联系方式
+如果你有任何问题或建议，请通过以下方式联系我们：
+- 邮箱: hufei_yx@sina.com
+- GitHub: [项目地址](https://github.com/fred-hu/dev-tools-for-browser)
 
-## Submit to the webstores
-
-The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+感谢你使用此浏览器插件，希望它能为你的开发工作带来便利！
