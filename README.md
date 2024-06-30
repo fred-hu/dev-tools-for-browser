@@ -1,5 +1,7 @@
 # 多功能开发者工具浏览器插件
-
+<p align="center">
+  <img alt="Dev-Tools" src="https://github.com/fred-hu/images/raw/main/icon.png" width="64"/>
+</p>
 ## 简介
 这是一款集多个开发者工具于一身的浏览器插件，旨在提高开发者的工作效率。插件提供了MOCK数据、重定向、修改响应头、一键破解网页复制限制等功能。
 
@@ -10,9 +12,12 @@
 - **一键破解网页复制限制**: 解除网页上的复制限制，方便内容获取和分析。
 
 ## 图示
-![Icon](https://github.com/fred-hu/images/raw/main/icon.png)
-![Icon](https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.21.59.png)
-![Icon](https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.22.16.png)
+<p align="center">
+  <img src="https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.21.59.png" width="300"/>
+</p>
+<p align="center">
+  <img src="https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.22.16.png" width="64"/>
+</p>
 
 ## 安装
 1. 下载插件压缩包。
