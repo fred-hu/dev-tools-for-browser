@@ -16,7 +16,7 @@
   <img src="https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.21.59.png" width="300"/>
 </p>
 <p align="center">
-  <img src="https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.22.16.png" width="64"/>
+  <img src="https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.22.16.png" width="300"/>
 </p>
 
 ## 安装
