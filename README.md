@@ -1,7 +1,9 @@
 # 多功能开发者工具浏览器插件
+
 <p align="center">
   <img alt="Dev-Tools" src="https://github.com/fred-hu/images/raw/main/icon.png" width="64"/>
 </p>
+
 ## 简介
 这是一款集多个开发者工具于一身的浏览器插件，旨在提高开发者的工作效率。插件提供了MOCK数据、重定向、修改响应头、一键破解网页复制限制等功能。
 
