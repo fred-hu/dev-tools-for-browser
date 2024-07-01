@@ -143,6 +143,12 @@ export default function AppCard(props: IProps): React.ReactElement {
         }
       }
     }
+    * {
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none;
+    }
   `
   return (
     <div className="item item--1" css={innerStyle} onClick={clickable ? onClick : undefined}>
