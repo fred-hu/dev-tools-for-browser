@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React, { useState } from "react"
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import React, { useState } from 'react'
 
 interface IProps {
   checked: boolean
@@ -31,7 +32,7 @@ export default function TurnSwitch(props: IProps): React.ReactElement {
       display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 12px;
       line-height: 15px;
       position: relative;
@@ -42,7 +43,7 @@ export default function TurnSwitch(props: IProps): React.ReactElement {
     }
     .switch + label::before,
     .switch + label::after {
-      content: "";
+      content: '';
       display: block;
     }
     .switch + label::before {
@@ -140,10 +141,18 @@ export default function TurnSwitch(props: IProps): React.ReactElement {
       -webkit-transform: none;
       transform: none;
     }
+    * {
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none;
+    }
   `
-
+  const Div = styled.div`
+    ${innerStyle}
+  `
   return (
-    <div css={innerStyle} onClick={(e) => e.stopPropagation()}>
+    <Div onClick={(e) => e.stopPropagation()}>
       <input
         checked={checked}
         onChange={(e) => {
@@ -165,6 +174,6 @@ export default function TurnSwitch(props: IProps): React.ReactElement {
           </span>
         </span>
       </label>
-    </div>
+    </Div>
   )
 }

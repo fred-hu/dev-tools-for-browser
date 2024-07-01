@@ -1,60 +1,70 @@
-# 多功能开发者工具浏览器插件
 
-<p align="center">
+<p align="center" style="text-align:center">
   <img alt="Dev-Tools" src="https://github.com/fred-hu/images/raw/main/icon.png" width="64"/>
+  <p style="text-align:center">开发者工具</p>
+  <p style="text-align:center">(Manifest V3)</p>
 </p>
 
 ## 简介
-这是一款集多个开发者工具于一身的浏览器插件，旨在提高开发者的工作效率。插件提供了MOCK数据、重定向、修改响应头、一键破解网页复制限制等功能。
+这是一款集多个开发者工具于一身的浏览器插件，旨在提高开发者的工作效率。
 
 ## 功能
-- **MOCK数据**: 允许开发者模拟API响应数据，方便前端开发和测试。
-- **重定向**: 支持URL重定向，方便开发者在本地环境和生产环境之间切换。
-- **修改响应头**: 允许开发者修改HTTP响应头，便于调试和测试。
-- **一键破解网页复制限制**: 解除网页上的复制限制，方便内容获取和分析。
+- **MOCK功能**: 允许开发者在浏览器中模拟API响应数据、URL重定向、修改HTTP响应头。
+- **一键破解网页复制限制**: 解除网页上的复制限制。
+- **JSON to types**: json转ts类型。
+- **二维码**: 一键生成二维码。
+- **颜色转换**: 颜色转换工具。
+
+## 进度
+- [ ] MOCK
+- [ ] 一键破解网页复制限制
+- [x] JSON to ts types
+- [x] 二维码
+- [x] 颜色转换
+- [x] ...
+
+## 安装
+方式一、谷歌商店上线中...
+
+方式二、[dev-tools.zip](https://github.com/fred-hu/dev-tools-for-browser/releases)安装
+```
+1.下载dev-tools.zip（https://github.com/fred-hu/dev-tools-for-browser/releases）
+
+2.打开浏览器扩展程序页面（chrome://extensions/）
+
+3.打开开发者模式
+
+4.把下载好的dev-tools.zip拖入浏览器扩展程序页面
+```
+
+## 开发
+```
+1. git clone https://github.com/fred-hu/dev-tools-for-browser
+2. pnpm i
+3. pnpm run dev
+4. 打开浏览器扩展程序页面（chrome://extensions/）
+5. 打开开发者模式
+6. 加载已解压的扩展程序
+7. 选择项目根目录下的build/chrome-mv3-dev文件夹
+```
+
+## 构建
+```
+1. git clone https://github.com/fred-hu/dev-tools-for-browser
+2. pnpm i
+2. pnpm run build
+```
 
 ## 图示
 <p align="center">
-  <img src="https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.21.59.png" width="300"/>
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/menu.png" width="600"/>
 </p>
 <p align="center">
-  <img src="https://github.com/fred-hu/images/raw/main/iShot_2024-06-29_22.22.16.png" width="300"/>
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/mock.png" width="600"/>
 </p>
-
-## 安装
-1. 下载插件压缩包。
-2. 打开浏览器，进入扩展程序管理页面。
-3. 点击“加载已解压的扩展程序”，选择插件文件夹进行安装。
-
-## 使用方法
-### MOCK数据
-1. 打开插件设置页面。
-2. 进入“MOCK数据”选项卡。
-3. 添加或编辑API接口和对应的模拟数据。
-
-### 重定向
-1. 打开插件设置页面。
-2. 进入“重定向”选项卡。
-3. 添加或编辑URL重定向规则。
-
-### 修改响应头
-1. 打开插件设置页面。
-2. 进入“修改响应头”选项卡。
-3. 添加或编辑HTTP响应头规则。
-
-### 一键破解网页复制限制
-1. 访问需要破解复制限制的网页。
-2. 点击插件图标，选择“一键破解网页复制限制”功能。
 
 ## 贡献
 欢迎对本项目进行贡献！如果你有任何建议或发现了问题，请提交Issue或Pull Request。
 
 ## 许可证
 本项目基于MIT许可证开源，详细信息请参见LICENSE文件。
-
-## 联系方式
-如果你有任何问题或建议，请通过以下方式联系我们：
-- 邮箱: hufei_yx@sina.com
-- GitHub: [项目地址](https://github.com/fred-hu/dev-tools-for-browser)
-
-感谢你使用此浏览器插件，希望它能为你的开发工作带来便利！

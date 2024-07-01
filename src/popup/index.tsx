@@ -26,7 +26,11 @@ function IndexPopup() {
     open: false,
     app: {}
   })
-  const [globalSwitch, setGlobalSwitch] = useStorage<{ [key: string]: boolean }>(STORE_KEY.GLOBAL_SWITCH_CONFIG, {})
+  const [globalSwitch, setGlobalSwitch] = useStorage<{ [key: string]: boolean }>(STORE_KEY.GLOBAL_SWITCH_CONFIG, {
+    mock: false,
+    copy: false,
+    jsonToTs: false,
+  })
   const onClose = () => {
     setDrawerData((last) => ({
       ...last,
@@ -114,34 +118,24 @@ function IndexPopup() {
               }}
               icon={<img src={copy} />}
             />
-            {/* <AppCard
+            {window.model && <AppCard
               loading={loading}
               backgroundColor="#ffd8be"
               color="rgba(252, 161, 71, 1)"
-              name="JSON to TS"
-              description="JSON to TS type"
+              name="Gemini"
+              description="google gemini"
               clickable
               showSwitch={false}
               onClick={async () => {
-                // setDrawerData((last) => ({
-                //   ...last,
-                //   open: true,
-                //   app: {
-                //     title: 'JSON to TS',
-                //     code: 'jsonToTs',
-                //     description: 'JSON to TS type',
-                //     icon: iconInterface
-                //   }
-                // }))
                 chrome.windows.create({
-                  url: "popup.html",
-                  type: "popup",
-                  width: 400,
-                  height: 400
+                  url: `chrome-extension://${chrome.runtime.id}/tabs/gemini.html`,
+                  type: "panel",
+                  width: 500,
+                  height: 500
                 });
               }}
               icon={<img src={iconSearch} />}
-            /> */}
+            />}
           </Flex>
         </Spin>
       </div>
