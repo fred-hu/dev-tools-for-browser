@@ -26,7 +26,11 @@ function IndexPopup() {
     open: false,
     app: {}
   })
-  const [globalSwitch, setGlobalSwitch] = useStorage<{ [key: string]: boolean }>(STORE_KEY.GLOBAL_SWITCH_CONFIG, {})
+  const [globalSwitch, setGlobalSwitch] = useStorage<{ [key: string]: boolean }>(STORE_KEY.GLOBAL_SWITCH_CONFIG, {
+    mock: false,
+    copy: false,
+    jsonToTs: false,
+  })
   const onClose = () => {
     setDrawerData((last) => ({
       ...last,
