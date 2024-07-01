@@ -22,9 +22,8 @@ yarn-error.log*
 # local env files
 .env*.local
 
-out/
-build/
-dist/
+out
+dist
 
 # plasmo
 .plasmo
@@ -33,3 +32,4 @@ dist/
 .tsbuildinfo
 
 node_modules
+build
