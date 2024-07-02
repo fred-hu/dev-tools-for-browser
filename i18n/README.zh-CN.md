@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img alt="Dev-Tools" src="https://github.com/fred-hu/images/raw/main/icon.png" width="64"/>
+  <img alt="Dev-Tools" src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/icon.png" width="64"/>
 </p>
 <p align="center">开发者工具</p>
 <p align="center">(Manifest V3)</p>
