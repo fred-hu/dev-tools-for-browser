@@ -46,7 +46,6 @@
       "http://*/*",
       "https://*/*",
       "*://*/*",
-      "chrome-extension://*/*",
       "<all_urls>"
     ],
     "permissions": [
@@ -59,12 +58,7 @@
       "declarativeNetRequestWithHostAccess",
       "declarativeNetRequestFeedback",
       "storage",
-      "*://*/*",
-      "sidePanel",
-      "chrome://*/*",
-      "<all_urls>",
-      "http://*/*",
-      "https://*/*"
+      "sidePanel"
     ]
   }
 }
