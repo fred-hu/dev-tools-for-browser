@@ -13,7 +13,7 @@ import store, { STORE_KEY } from '~app/utils/store'
 const injectMap = new Map()
 
 const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) => {
-  const data = await store.getItem(STORE_KEY.ROUTES)
+  const data = await store.getItem(STORE_KEY.ROUTES) || []
   const [tab] = await chrome.tabs.query({
     active: true
   })
@@ -30,7 +30,7 @@ const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) 
             tabId
           },
           world: 'MAIN', // MAIN in order to access the window object
-          func: async (data, varName) => {
+          func: async (data, varName: string) => {
             try {
               window[varName] = data
             } catch (error) {
@@ -56,7 +56,7 @@ const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) 
           tabId
         },
         world: 'MAIN', // MAIN in order to access the window object
-        func: async (data, varName) => {
+        func: async (data, varName: string) => {
           try {
             window[varName] = data
           } catch (error) {

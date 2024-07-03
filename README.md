@@ -60,10 +60,13 @@
 
 ## 图示
 <p align="center">
-  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/menu.png" width="600"/>
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/panel.png" width="600"/>
 </p>
 <p align="center">
   <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/mock.png" width="600"/>
+</p>
+<p align="center">
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/jsontots.png" width="600"/>
 </p>
 
 ## 贡献
