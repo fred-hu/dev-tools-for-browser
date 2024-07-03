@@ -53,57 +53,89 @@ export function encryptDecrypt(input: string, key: string) {
   return output.join('')
 }
 
-// type JSONValue = string | number | boolean | JSONObject | JSONArray
-// interface JSONObject {
-//   [key: string]: JSONValue
-// }
-// interface JSONArray extends Array<JSONValue> {}
+export function jsonToTsTypes(json: any, rootTypeName: string = 'RootType'): string {
+  const typeMap: { [key: string]: string } = {};
 
-// function jsonToTypeScriptType(json: JSONValue, typeName: string = 'Root'): string {
-//   if (typeof json === 'string') {
-//     return 'string'
-//   } else if (typeof json === 'number') {
-//     return 'number'
-//   } else if (typeof json === 'boolean') {
-//     return 'boolean'
-//   } else if (Array.isArray(json)) {
-//     if (json.length === 0) {
-//       return 'any[]'
-//     }
-//     const arrayType = jsonToTypeScriptType(json[0])
-//     return `${arrayType}[]`
-//   } else if (typeof json === 'object' && json !== null) {
-//     let result = `interface ${typeName} {\n`
-//     for (const key in json) {
-//       const valueType = jsonToTypeScriptType(json[key], capitalizeFirstLetter(key))
-//       result += `  ${key}: ${valueType};\n`
-//     }
-//     result += '}'
-//     return result
-//   } else {
-//     return 'any'
-//   }
-// }
+  function capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
-// function capitalizeFirstLetter(string: string): string {
-//   return string.charAt(0).toUpperCase() + string.slice(1)
-// }
+  function getType(obj: any, name: string): string {
+    if (typeof obj === 'object' && obj !== null) {
+      if (Array.isArray(obj)) {
+        if (obj.length === 0) {
+          return 'any[]';
+        }
+        const singularName = name;
+        const elementType = getType(obj[0], singularName);
+        return `${elementType}[]`;
+      } else {
+        const typeName = `${capitalizeFirstLetter(name)}Type`;
+        if (typeMap[typeName]) {
+          return typeName; // 如果已处理过相同名称的类型，则直接返回类型名称
+        }
+        typeMap[typeName] = ''; // 占位，防止循环引用
+        const properties = Object.keys(obj).map(key => {
+          const propName = capitalizeFirstLetter(key);
+          return `  ${key}: ${getType(obj[key], propName)}`;
+        }).join(';\n');
+        typeMap[typeName] = `{\n${properties}\n}`;
+        return typeName;
+      }
+    } else {
+      return typeof obj;
+    }
+  }
 
-// // 示例用法
-// const jsonData = {
-//   name: 'John',
-//   age: 30,
-//   isStudent: false,
-//   courses: ['Math', 'Science'],
-//   address: {
-//     street: '123 Main St',
-//     city: 'Anytown'
-//   }
-// }
+  const rootType = getType(json, rootTypeName);
+  let allTypes = '';
+  Object.keys(typeMap).forEach(key => {
+    allTypes += `type ${key} = ${typeMap[key]};\n\n`;
+  });
 
-// const typeScriptType = jsonToTypeScriptType(jsonData)
-// console.log(typeScriptType)
+  return `${allTypes}type ${rootTypeName} = ${rootType};`;
+}
+
+/**
+ * 复制文本
+ * @param {string} str 待复制的文本
+ * @returns {string | Promise<void>}
+ */
+export const copyText = async str => {
+  const copyFn = () => {
+    const elm = document.createElement('textarea');
+    elm.value = str;
+    elm.setAttribute('readonly', '');
+    elm.style.position = 'absolute';
+    elm.style.left = '-9999px';
+    document.body.appendChild(elm);
+    const selected =
+      document.getSelection().rangeCount > 0
+        ? document.getSelection().getRangeAt(0)
+        : false;
+    elm.select();
+    document.execCommand('copy');
+    document.body.removeChild(elm);
+    if (selected) {
+      document.getSelection().removeAllRanges();
+      document.getSelection().addRange(selected);
+    }
+  };
+  if (navigator.clipboard) {
+    const text = str;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      copyFn();
+    }
+  } else {
+    copyFn();
+  }
+};
+
 export default {
+  copyText,
+  jsonToTsTypes,
   convertDictToArray,
   log,
   jointUrl,
