@@ -21,7 +21,7 @@
 ## 进度
 - [x] MOCK
 - [x] 一键破解网页复制限制
-- [ ] JSON to ts types
+- [x] JSON to ts types
 - [ ] 二维码
 - [ ] 颜色转换
 - [ ] ...

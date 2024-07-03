@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import {
   AppstoreOutlined,
-  BarsOutlined,
+  OrderedListOutlined,
   CheckOutlined,
   ChromeOutlined,
   CloseOutlined,
@@ -215,7 +215,7 @@ function IndexPopup() {
           <Segmented
             disabled
             options={[
-              { value: 'list', icon: <BarsOutlined /> },
+              { value: 'list', icon: <OrderedListOutlined /> },
               { value: 'cards', icon: <AppstoreOutlined /> }
             ]}
           />

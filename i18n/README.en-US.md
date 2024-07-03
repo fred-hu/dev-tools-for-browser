@@ -21,7 +21,7 @@ This is a browser extension that integrates multiple developer tools, aimed at i
 ## Progress
 - [x] MOCK
 - [x] One-Click Unlock for Web Page Copy Restrictions
-- [ ] JSON to TS Types
+- [x] JSON to TS Types
 - [ ] QR Code
 - [ ] Color Conversion
 - [ ] ...
