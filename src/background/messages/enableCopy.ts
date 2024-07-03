@@ -34,7 +34,10 @@ const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) 
 // 激活tab
 const onActivated = async (e) => {
   const { windowId, tabId } = e
-  inject(windowId, tabId)
+  const tab = await chrome.tabs.get(tabId);
+  if (tab.url && (tab.url.startsWith("http://") || tab.url.startsWith("https://"))) {
+    inject(windowId, tabId);
+  }
 }
 // 页面刷新
 const onUpdated = function (tabId, changeInfo, tab) {
@@ -92,8 +95,10 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
       active: true
     })
     if (tab) {
-      const { windowId, id } = tab
-      inject(windowId, id)
+      const { windowId, id, url } = tab
+      if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
+        inject(windowId, id)
+      }
     }
   }
   res.send({})
