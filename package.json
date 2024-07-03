@@ -1,7 +1,7 @@
 {
   "name": "Dev-Tools",
   "displayName": "Dev Tools",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "a tool",
   "author": "fred",
   "scripts": {
