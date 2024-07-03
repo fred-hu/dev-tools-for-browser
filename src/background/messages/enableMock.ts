@@ -90,7 +90,10 @@ const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) 
 // 激活tab
 const onActivated = async (e) => {
   const { windowId, tabId } = e
-  inject(windowId, tabId)
+  const tab = await chrome.tabs.get(tabId);
+  if (tab.url && (tab.url.startsWith("http://") || tab.url.startsWith("https://"))) {
+    inject(windowId, tabId);
+  }
 }
 // 页面刷新
 const onUpdated = function (tabId, changeInfo, tab) {

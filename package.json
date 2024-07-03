@@ -1,7 +1,7 @@
 {
   "name": "Dev-Tools",
   "displayName": "Dev Tools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a tool",
   "author": "fred",
   "scripts": {
@@ -44,7 +44,8 @@
   "manifest": {
     "host_permissions": [
       "http://*/*",
-      "https://*/*"
+      "https://*/*",
+      "<all_urls>"
     ],
     "permissions": [
       "scripting",
