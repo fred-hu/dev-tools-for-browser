@@ -24,7 +24,14 @@ export default function UnnamedComponent(): React.ReactElement {
   }
   return (
     <div>
-      <JsonEditor id="jstojson" value={data} onChange={setData} />
+      <JsonEditor
+        id="jstojson"
+        value={data}
+        onChange={(v) => {
+          setData(v)
+          setTs('')
+        }}
+      />
       <Flex style={{ marginTop: 10 }} justify="space-between">
         <Button
           type="primary"

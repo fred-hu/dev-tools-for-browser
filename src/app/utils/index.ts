@@ -53,47 +53,57 @@ export function encryptDecrypt(input: string, key: string) {
   return output.join('')
 }
 
-export function jsonToTsTypes(json: any, rootTypeName: string = 'RootType'): string {
+export function jsonToTsTypes(json: any, rootTypeName: string = 'Root', parentTypeName: string = ''): string {
   const typeMap: { [key: string]: string } = {};
+  let anonymousTypeIndex = 0; // 用于生成匿名类型的索引
+  let levelIndexMap: { [key: string]: number } = {}; // 记录每个类型名称出现的次数
 
   function capitalizeFirstLetter(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  function getType(obj: any, name: string): string {
+  function getType(obj: any, name: string, parentTypeName: string, isRoot: boolean = false): string {
     if (typeof obj === 'object' && obj !== null) {
       if (Array.isArray(obj)) {
         if (obj.length === 0) {
           return 'any[]';
         }
-        const singularName = name;
-        const elementType = getType(obj[0], singularName);
+        const elementType = getType(obj[0], name, parentTypeName);
         return `${elementType}[]`;
       } else {
-        const typeName = `${capitalizeFirstLetter(name)}Type`;
-        if (typeMap[typeName]) {
-          return typeName; // 如果已处理过相同名称的类型，则直接返回类型名称
+        let typeName = isRoot ? rootTypeName : `${capitalizeFirstLetter(name)}`;
+        let fullTypeName = parentTypeName ? `${parentTypeName}${typeName}` : typeName;
+        // 对于同名类型，通过增加索引来区分
+        if (levelIndexMap[fullTypeName] !== undefined) {
+          levelIndexMap[fullTypeName] += 1;
+          fullTypeName += levelIndexMap[fullTypeName];
+        } else {
+          levelIndexMap[fullTypeName] = 1;
         }
-        typeMap[typeName] = ''; // 占位，防止循环引用
+        if (typeMap[fullTypeName]) {
+          // 如果名称已存在，则创建一个匿名类型
+          fullTypeName += `_${++anonymousTypeIndex}`; 
+        }
+        typeMap[fullTypeName] = ''; // 占位，防止循环引用
         const properties = Object.keys(obj).map(key => {
-          const propName = capitalizeFirstLetter(key);
-          return `  ${key}: ${getType(obj[key], propName)}`;
+          return `  ${key}: ${getType(obj[key], key, fullTypeName)}`;
         }).join(';\n');
-        typeMap[typeName] = `{\n${properties}\n}`;
-        return typeName;
+        typeMap[fullTypeName] = `{\n${properties}\n}`;
+        return fullTypeName;
       }
     } else {
       return typeof obj;
     }
   }
 
-  const rootType = getType(json, rootTypeName);
+  // 传入 true 标记这是根对象
+  const rootType = getType(json, rootTypeName, '', true);
   let allTypes = '';
   Object.keys(typeMap).forEach(key => {
     allTypes += `type ${key} = ${typeMap[key]};\n\n`;
   });
 
-  return `${allTypes}type ${rootTypeName} = ${rootType};`;
+  return allTypes.trim();
 }
 
 /**
