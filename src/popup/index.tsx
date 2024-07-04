@@ -1,15 +1,15 @@
 /* eslint-disable max-len */
 import {
   AppstoreOutlined,
-  OrderedListOutlined,
   CheckOutlined,
   ChromeOutlined,
   CloseOutlined,
   CopyOutlined,
   GlobalOutlined,
+  OrderedListOutlined,
   SettingOutlined
 } from '@ant-design/icons'
-
+import { MESSAGE_TYPES } from '~app/constants'
 import '~app/styles/tailwind.scss'
 
 import {
@@ -26,7 +26,8 @@ import {
   Space,
   Spin,
   Switch,
-  Tag
+  Tag,
+  Tooltip
 } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -40,15 +41,16 @@ import store, { globalSwitchConfig, STORE_KEY } from '~app/utils/store'
 import type { TYPE_GLOBAL_SWITCH_CONFIG } from '~app/utils/store'
 
 import copy from '/assets/svg/copy.svg'
-import iconInterface from '/assets/svg/interface.svg'
+import mockIcon from '/assets/svg/mock.svg'
 import typescript from '/assets/svg/typescript.svg'
+import qrcode from '/assets/svg/qrcode.svg'
 
 type AppConfigItem = {
   app: string
   name: string
   description: string
   icon: string
-  enable: boolean
+  enable?: boolean
   loading: boolean
   onSettingClick?: () => void
   onOpen?: () => void
@@ -68,7 +70,6 @@ function IndexPopup() {
   const [globalSwitch, setGlobalSwitch] = useStorage<{ [key: string]: boolean }>(STORE_KEY.GLOBAL_SWITCH_CONFIG, {
     [globalSwitchConfig.MOCK]: false,
     [globalSwitchConfig.COPY]: false,
-    [globalSwitchConfig.JSON_TO_TS]: false
   })
   const onClose = () => {
     setDrawerData((last) => ({
@@ -83,14 +84,13 @@ function IndexPopup() {
       const data: TYPE_GLOBAL_SWITCH_CONFIG = (await store.get(STORE_KEY.GLOBAL_SWITCH_CONFIG)) || {
         [globalSwitchConfig.MOCK]: false,
         [globalSwitchConfig.COPY]: false,
-        [globalSwitchConfig.JSON_TO_TS]: false
       }
       setList([
         {
           app: globalSwitchConfig.MOCK,
           name: 'MOCK工具',
           description: 'MOCK接口数据、URL重定向、修改响应头',
-          icon: iconInterface,
+          icon: mockIcon,
           loading: false,
           enable: !!data[globalSwitchConfig.MOCK],
           onSettingClick: () => {
@@ -165,36 +165,84 @@ function IndexPopup() {
           description: '通过json生成typescript类型',
           icon: typescript,
           loading: false,
-          enable: !!data[globalSwitchConfig.JSON_TO_TS],
           onOpen: () => {
             chrome.windows.getAll({ populate: true }, (windows) => {
-              const panelUrl = `chrome-extension://${chrome.runtime.id}/tabs/jsontots.html`;
-              let existingPanel = null;
+              const panelUrl = `chrome-extension://${chrome.runtime.id}/tabs/jsontots.html`
+              let existingPanel = null
               // 遍历所有窗口，查找是否已经存在具有相同 URL 的面板
               for (const window of windows) {
                 if (window.type === 'popup') {
                   for (const tab of window.tabs) {
                     if (tab.url.includes(panelUrl)) {
-                      existingPanel = window;
-                      break;
+                      existingPanel = window
+                      break
                     }
                   }
                 }
-                if (existingPanel) break;
+                if (existingPanel) break
               }
               if (existingPanel) {
                 // 如果已经存在具有相同 URL 的面板，则激活该窗口
-                chrome.windows.update(existingPanel.id, { focused: true });
+                chrome.windows.update(existingPanel.id, { focused: true })
               } else {
                 // 如果不存在，则创建一个新的面板
                 chrome.windows.create({
                   url: panelUrl,
-                  type: "panel",
-                  width: 500,
-                  height: 600
-                });
+                  type: 'panel',
+                  width: 600,
+                  height: 750
+                })
               }
-            });
+            })
+          }
+        },
+        {
+          app: globalSwitchConfig.QR_CODE,
+          name: '二维码',
+          description: '生成二维码',
+          icon: qrcode,
+          loading: false,
+          onOpen: async () => {
+            let url = ''
+            const tab = await chrome.tabs.query({ active: true, currentWindow: true })
+            if(tab.length) {
+              const tabUrl = tab[0].url;
+              url = tabUrl.startsWith('http') ? tabUrl : '';
+            }
+            chrome.windows.getAll({ populate: true },async (windows) => {
+              const panelUrl = `chrome-extension://${chrome.runtime.id}/tabs/qrcode.html`
+              let existingPanel = null
+              // 遍历所有窗口，查找是否已经存在具有相同 URL 的面板
+              for (const window of windows) {
+                if (window.type === 'popup') {
+                  for (const tab of window.tabs) {
+                    if (tab.url.includes(panelUrl)) {
+                      existingPanel = window
+                      break
+                    }
+                  }
+                }
+                if (existingPanel) break
+              }
+              if (existingPanel) {
+                // 如果已经存在具有相同 URL 的面板，则激活该窗口
+                await chrome.windows.update(existingPanel.id, { focused: true })
+                setTimeout(() => {
+                  chrome.tabs.sendMessage(existingPanel.tabs[0].id, { url });
+                }, 0);
+              } else {
+                // 如果不存在，则创建一个新的面板
+                const tab = await chrome.windows.create({
+                  url: panelUrl,
+                  type: 'panel',
+                  width: 400,
+                  height: 400
+                })
+                setTimeout(() => {
+                  chrome.tabs.sendMessage(tab.tabs[0].id, { url });
+                }, 500);
+              }
+            })
           }
         }
       ])
@@ -227,7 +275,7 @@ function IndexPopup() {
           loadMore={null}
           dataSource={list}
           renderItem={(item) => (
-            <List.Item actions={[]}>
+            <List.Item actions={[]} style={{ padding: '5px 0' }}>
               <Skeleton avatar title={false} loading={item.loading} active>
                 <List.Item.Meta
                   avatar={
@@ -236,7 +284,22 @@ function IndexPopup() {
                     </Flex>
                   }
                   title={<span>{item.name}</span>}
-                  description={item.description}
+                  description={
+                    <Tooltip title={item.description} placement="topLeft">
+                      <span
+                        style={{
+                          fontSize: 12,
+                          display: 'inline-block',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          width: 190,
+                          boxSizing: 'border-box'
+                        }}>
+                        {item.description}
+                      </span>
+                    </Tooltip>
+                  }
                 />
                 <Flex justify="space-between" align="center" vertical={false} gap={10} style={{ paddingLeft: 10 }}>
                   {item.onSettingClick && <Button icon={<SettingOutlined />} onClick={item.onSettingClick}></Button>}

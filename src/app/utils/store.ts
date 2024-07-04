@@ -13,12 +13,12 @@ export enum globalSwitchConfig {
   MOCK = 'mock',
   COPY = 'copy',
   JSON_TO_TS = 'jsonToTs',
+  QR_CODE = 'qrCode',
 }
 
 export type TYPE_GLOBAL_SWITCH_CONFIG = {
   [globalSwitchConfig.MOCK]: boolean,
   [globalSwitchConfig.COPY]: boolean,
-  [globalSwitchConfig.JSON_TO_TS]: boolean,
 }
 
 const store = new Storage({

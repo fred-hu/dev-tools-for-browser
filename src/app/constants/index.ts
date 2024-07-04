@@ -7,6 +7,7 @@ export const MESSAGE_TYPES = {
   MATCHING_UPDATE: 'matchingUpdate',
   SET_LOADING: 'setLoading',
   SET_RECORD: 'setRecord',
+  SET_QR_CODE: 'setQrCode',
 }
 
 export enum OPERATE_TYPE {
