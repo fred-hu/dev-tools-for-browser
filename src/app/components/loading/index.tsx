@@ -1,18 +1,18 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React from "react"
+import { css } from '@emotion/react';
+import React from 'react';
 
 interface IProps {
-  children?: React.ReactElement
-  name?: string
-  description?: string
-  backgroundColor?: string
-  color?: string
-  icon?: React.ReactElement
-  width?: string
-  height?: string
-  onClick?: () => void
+  children?: React.ReactElement;
+  name?: string;
+  description?: string;
+  backgroundColor?: string;
+  color?: string;
+  icon?: React.ReactElement;
+  width?: string;
+  height?: string;
+  onClick?: () => void;
 }
 /**
  * Loading组件
@@ -20,7 +20,7 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function MainTag(props: IProps): React.ReactElement {
-  const { name, description, backgroundColor, color, icon, width, height, onClick } = props
+  const { name, description, backgroundColor, color, icon, width, height, onClick } = props;
   const innerStyle = css`
     border: none;
     background-color: white;
@@ -59,11 +59,11 @@ export default function MainTag(props: IProps): React.ReactElement {
         transform: rotate(360deg);
       }
     }
-  `
+  `;
   return (
     <button className="loader__btn" css={innerStyle}>
       <div className="loader" />
       Loading ...
     </button>
-  )
+  );
 }

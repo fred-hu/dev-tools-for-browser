@@ -1,17 +1,17 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef } from 'react';
 
-import "jsoneditor/dist/jsoneditor.css"
+import 'jsoneditor/dist/jsoneditor.css';
 
-import JSONEditor from "jsoneditor/dist/jsoneditor"
+import JSONEditor from 'jsoneditor/dist/jsoneditor';
 
 interface IProps {
-  value?: string
+  value?: string;
   // eslint-disable-next-line no-unused-vars
-  onChange?: (data?: string) => void
-  placeholder?: string
-  id: string
-  height?: string
-  width?: string
+  onChange?: (data?: string) => void;
+  placeholder?: string;
+  id: string;
+  height?: string;
+  width?: string;
 }
 
 /**
@@ -21,28 +21,28 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function JsonEditorComponent(props: IProps): React.ReactElement {
-  const { value, onChange = () => {}, id, width, height } = props
-  const editorRef = useRef<any>()
+  const { value, onChange = () => {}, id, width, height } = props;
+  const editorRef = useRef<any>();
   useEffect(() => {
     // create the editor
-    const container = document.getElementById(id || "jsoneditor")
+    const container = document.getElementById(id || 'jsoneditor');
     const options = {
-      mode: "text",
+      mode: 'text',
       onChangeText: (val) => {
-        onChange(val)
-      }
-    }
-    const editor = new JSONEditor(container, options)
-    editor.setText(value)
-    editorRef.current = editor
+        onChange(val);
+      },
+    };
+    const editor = new JSONEditor(container, options);
+    editor.setText(value);
+    editorRef.current = editor;
     return () => {
-      editor.destroy()
-    }
-  }, [])
+      editor.destroy();
+    };
+  }, []);
   useEffect(() => {
     if (editorRef?.current) {
-      editorRef.current.setText(value ?? '')
+      editorRef.current.setText(value ?? '');
     }
-  }, [value])
-  return <div id={id || "jsoneditor"} style={{ width: width || "100%", height: height || "300px" }} />
+  }, [value]);
+  return <div id={id || 'jsoneditor'} style={{ width: width || '100%', height: height || '300px' }} />;
 }

@@ -9,8 +9,8 @@ import {
   PlusOutlined,
   SwitcherOutlined,
   UploadOutlined,
-  WarningOutlined
-} from '@ant-design/icons'
+  WarningOutlined,
+} from '@ant-design/icons';
 import {
   Button,
   Divider,
@@ -26,136 +26,137 @@ import {
   Switch,
   Tabs,
   theme,
-  Typography
-} from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
+  Typography,
+} from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 
-import '~app/styles/tailwind.scss'
-import './mock.css'
-import { sendToBackground } from '@plasmohq/messaging'
-import { useStorage } from '@plasmohq/storage/hook'
+import '~app/styles/tailwind.scss';
+import './mock.css';
 
-import DownloadBtn from '~app/components/download-btn'
-import FocusInput from '~app/components/focus-input'
-import { MOCK_TYPE, OPERATE_TYPE, PROXY_ROUTE_KEY } from '~app/constants'
-import { GROUP_KEY } from '~app/constants/group'
-import type { GROUP_ITEM } from '~app/constants/group'
-import useGroupsStorage from '~app/hooks/useGroupsStorage'
-import { encryptDecrypt, moveToTop } from '~app/utils'
-import store, { STORE_KEY } from '~app/utils/store'
+import { sendToBackground } from '@plasmohq/messaging';
+import { useStorage } from '@plasmohq/storage/hook';
 
-import EditGroup from './components/drawer-group'
-import EditForm from './components/mock-form'
-import MockTable from './components/table'
+import DownloadBtn from '~app/components/download-btn';
+import FocusInput from '~app/components/focus-input';
+import { MOCK_TYPE, OPERATE_TYPE, PROXY_ROUTE_KEY } from '~app/constants';
+import { GROUP_KEY } from '~app/constants/group';
+import type { GROUP_ITEM } from '~app/constants/group';
+import useGroupsStorage from '~app/hooks/useGroupsStorage';
+import { encryptDecrypt, moveToTop } from '~app/utils';
+import store, { STORE_KEY } from '~app/utils/store';
 
-type TargetKey = React.MouseEvent | React.KeyboardEvent | string
-const { Text } = Typography
-const { Header, Content, Footer } = Layout
+import EditGroup from './components/drawer-group';
+import EditForm from './components/mock-form';
+import MockTable from './components/table';
+
+type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
+const { Text } = Typography;
+const { Header, Content, Footer } = Layout;
 export type TFilter = {
-  keyWords: string
-  group: string
-}
-type NotificationType = 'success' | 'info' | 'warning' | 'error'
+  keyWords: string;
+  group: string;
+};
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 const App: React.FC = () => {
   const {
-    token: { colorBgContainer, borderRadiusLG }
-  } = theme.useToken()
-  const formWidth = 680
-  const fileInputRef = useRef(null)
-  const [api, notificationContextHolder] = notification.useNotification()
-  const [modal, modalContextHolder] = Modal.useModal()
-  const [form] = Form.useForm()
-  const id = Form.useWatch([PROXY_ROUTE_KEY.ID], form)
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
+  const formWidth = 680;
+  const fileInputRef = useRef(null);
+  const [api, notificationContextHolder] = notification.useNotification();
+  const [modal, modalContextHolder] = Modal.useModal();
+  const [form] = Form.useForm();
+  const id = Form.useWatch([PROXY_ROUTE_KEY.ID], form);
   const [drawerData, setDrawerData] = useState({
     open: false,
-    data: null
-  })
-  const [loading, setLoading] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [isAll, setIsAll] = useState(false) // 是否不限URL
+    data: null,
+  });
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isAll, setIsAll] = useState(false); // 是否不限URL
   const [filter, setFilter] = useState<TFilter>({
     keyWords: '',
-    group: ''
-  })
+    group: '',
+  });
   const [proxyRoutes, setProxyRoutes] = useStorage(
     {
       key: STORE_KEY.ROUTES,
-      instance: store
+      instance: store,
     },
     []
-  )
+  );
   const [globalSwitchConfig] = useStorage(
     {
       key: STORE_KEY.GLOBAL_SWITCH_CONFIG,
-      instance: store
+      instance: store,
     },
     {}
-  )
-  const emptyGroupMocks = useRef(false)
-  const [groups, setGroups] = useGroupsStorage()
-  const [groupMap] = useStorage(STORE_KEY.GROUPS_MAP, {})
+  );
+  const emptyGroupMocks = useRef(false);
+  const [groups, setGroups] = useGroupsStorage();
+  const [groupMap] = useStorage(STORE_KEY.GROUPS_MAP, {});
   const openNotificationWithIcon = (type: NotificationType, message, description) => {
     api[type]({
       message,
-      description
-    })
-  }
+      description,
+    });
+  };
   const showModal = () => {
-    setOpen(true)
+    setOpen(true);
     setTimeout(() => {
       // 新增时重置表单
-      form.resetFields()
-      form.setFieldValue(PROXY_ROUTE_KEY.GROUP, filter?.group || '')
-    }, 0)
-  }
+      form.resetFields();
+      form.setFieldValue(PROXY_ROUTE_KEY.GROUP, filter?.group || '');
+    }, 0);
+  };
   const updateRules = async () => {
     const result = await sendToBackground({
       name: 'updateRules',
-      body: {}
-    })
+      body: {},
+    });
     if (!result) {
-      console.log('updateRules success')
+      console.log('updateRules success');
     }
-  }
+  };
   const handleOk = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const values = await form.validateFields()
+      const values = await form.validateFields();
       if (isAll) {
         Object.assign(values, {
           [PROXY_ROUTE_KEY.URL]: undefined,
-          [PROXY_ROUTE_KEY.MATCH_TYPE]: undefined
-        })
+          [PROXY_ROUTE_KEY.MATCH_TYPE]: undefined,
+        });
       }
-      const { requestHeaders = [], responseHeader = [] } = values
+      const { requestHeaders = [], responseHeader = [] } = values;
       requestHeaders.forEach((v) => {
         if (v.operationType === 'remove') {
-          delete v.value
+          delete v.value;
         }
-      })
+      });
       responseHeader.forEach((v) => {
         if (v.operationType === 'remove') {
-          delete v.value
+          delete v.value;
         }
-      })
+      });
       if (!values[PROXY_ROUTE_KEY.ID]) {
         // 新增
-        setProxyRoutes((last) => [{ ...values, id: `${+new Date()}` }, ...last])
+        setProxyRoutes((last) => [{ ...values, id: `${+new Date()}` }, ...last]);
       } else {
         // 编辑
-        const item = proxyRoutes.find((item, i) => item.id === values.id || i === +values.id)
+        const item = proxyRoutes.find((item, i) => item.id === values.id || i === +values.id);
         if (item) {
           // 更新编辑了的字段
           Object.keys(values).forEach((key) => {
-            item[key] = values[key]
-          })
+            item[key] = values[key];
+          });
           if (values[PROXY_ROUTE_KEY.MOCK_TYPE] === MOCK_TYPE.NORMAL) {
-            ;[PROXY_ROUTE_KEY.REDIRECT_URL, PROXY_ROUTE_KEY.REQUEST_HEADERS, PROXY_ROUTE_KEY.RESPONSE_HEADERS].forEach(
+            [PROXY_ROUTE_KEY.REDIRECT_URL, PROXY_ROUTE_KEY.REQUEST_HEADERS, PROXY_ROUTE_KEY.RESPONSE_HEADERS].forEach(
               (v) => delete item[v]
-            )
+            );
           }
           if (values[PROXY_ROUTE_KEY.MOCK_TYPE] === MOCK_TYPE.REDIRECT) {
-            ;[
+            [
               PROXY_ROUTE_KEY.RESPONSE_STATUS,
               PROXY_ROUTE_KEY.RESPONSE,
               PROXY_ROUTE_KEY.REQUEST_HEADERS,
@@ -165,11 +166,11 @@ const App: React.FC = () => {
               PROXY_ROUTE_KEY.MOCK_RESPONSE_HEADERS,
               PROXY_ROUTE_KEY.ENABLE_MOCK_RESPONSE_HEADERS,
               PROXY_ROUTE_KEY.DELAY,
-              PROXY_ROUTE_KEY.REQUEST_TYPE
-            ].forEach((v) => delete item[v])
+              PROXY_ROUTE_KEY.REQUEST_TYPE,
+            ].forEach((v) => delete item[v]);
           }
           if (values[PROXY_ROUTE_KEY.MOCK_TYPE] === MOCK_TYPE.MODIFY_HEADERS) {
-            ;[
+            [
               PROXY_ROUTE_KEY.RESPONSE_STATUS,
               PROXY_ROUTE_KEY.RESPONSE,
               PROXY_ROUTE_KEY.MOCK_REQUEST_HEADERS,
@@ -178,178 +179,178 @@ const App: React.FC = () => {
               PROXY_ROUTE_KEY.ENABLE_MOCK_RESPONSE_HEADERS,
               PROXY_ROUTE_KEY.DELAY,
               PROXY_ROUTE_KEY.REDIRECT_URL,
-              PROXY_ROUTE_KEY.REQUEST_TYPE
-            ].forEach((v) => delete item[v])
+              PROXY_ROUTE_KEY.REQUEST_TYPE,
+            ].forEach((v) => delete item[v]);
           }
-          setProxyRoutes([...proxyRoutes])
+          setProxyRoutes([...proxyRoutes]);
         }
       }
-      setOpen(false)
-      setLoading(false)
+      setOpen(false);
+      setLoading(false);
       // 编辑后重置表单
       setTimeout(() => {
-        form.resetFields()
-      }, 200)
-      updateRules()
+        form.resetFields();
+      }, 200);
+      updateRules();
     } catch (errorInfo) {
-      console.log('Failed:', errorInfo)
-      setLoading(false)
+      console.log('Failed:', errorInfo);
+      setLoading(false);
     }
-  }
+  };
 
   const handleCancel = () => {
-    setOpen(false)
-    setIsAll(false)
+    setOpen(false);
+    setIsAll(false);
     // 取消时重置表单
     setTimeout(() => {
-      form.resetFields()
-    }, 200)
-  }
+      form.resetFields();
+    }, 200);
+  };
   const onCallBack = (opt, record) => {
-    const { index, ...mockConfig } = record
+    const { index, ...mockConfig } = record;
     switch (opt) {
       case OPERATE_TYPE.EDIT:
-        setIsAll(!mockConfig[PROXY_ROUTE_KEY.MATCH_TYPE] && !mockConfig[PROXY_ROUTE_KEY.URL])
-        setOpen(true)
-        form.setFieldsValue({ ...mockConfig, id: mockConfig.id })
-        break
+        setIsAll(!mockConfig[PROXY_ROUTE_KEY.MATCH_TYPE] && !mockConfig[PROXY_ROUTE_KEY.URL]);
+        setOpen(true);
+        form.setFieldsValue({ ...mockConfig, id: mockConfig.id });
+        break;
       case OPERATE_TYPE.DELETE:
-        const filter = proxyRoutes.filter((item, i) => item.id !== mockConfig.id && i !== +mockConfig.id)
-        setProxyRoutes([...filter])
-        updateRules()
-        break
+        const filter = proxyRoutes.filter((item, i) => item.id !== mockConfig.id && i !== +mockConfig.id);
+        setProxyRoutes([...filter]);
+        updateRules();
+        break;
       case OPERATE_TYPE.UPDATE_RECORD:
-        const item = proxyRoutes.find((item, i) => item.id === mockConfig.id || i === +mockConfig.id)
+        const item = proxyRoutes.find((item, i) => item.id === mockConfig.id || i === +mockConfig.id);
         if (item) {
           Object.keys(mockConfig).forEach((key) => {
-            item[key] = mockConfig[key]
-          })
-          setProxyRoutes([...proxyRoutes])
-          updateRules()
+            item[key] = mockConfig[key];
+          });
+          setProxyRoutes([...proxyRoutes]);
+          updateRules();
         }
-        break
+        break;
       case OPERATE_TYPE.TOP: // 置顶
-        moveToTop(proxyRoutes, index ?? proxyRoutes.findIndex((item) => item.id === mockConfig.id))
-        setProxyRoutes([...proxyRoutes])
-        message.success('置顶成功', 1)
-        break
+        moveToTop(proxyRoutes, index ?? proxyRoutes.findIndex((item) => item.id === mockConfig.id));
+        setProxyRoutes([...proxyRoutes]);
+        message.success('置顶成功', 1);
+        break;
       case OPERATE_TYPE.CLONE: // 克隆
         proxyRoutes.splice(index + 1, 0, {
           ...mockConfig,
-          id: `${+new Date()}`
-        })
-        setProxyRoutes([...proxyRoutes])
-        message.success('克隆成功', 1)
-        updateRules()
-        break
+          id: `${+new Date()}`,
+        });
+        setProxyRoutes([...proxyRoutes]);
+        message.success('克隆成功', 1);
+        updateRules();
+        break;
       default:
         // You can handle the default case here if needed
-        break
+        break;
     }
-  }
+  };
   const handleExport = async () => {
     const data = encryptDecrypt(
       JSON.stringify({
         secret: 'MOCK',
         proxyRoutes,
-        groups
+        groups,
       }),
       'upload'
-    )
-    const blob = new Blob([data], { type: 'text/plain;charset=utf-8;' })
-    const link = document.createElement('a')
-    const url = URL.createObjectURL(blob)
-    link.setAttribute('href', url)
-    link.setAttribute('download', 'config.mock')
-    link.style.visibility = 'hidden'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+    );
+    const blob = new Blob([data], { type: 'text/plain;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'config.mock');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   const handleUpload = (event) => {
-    const file = event.target.files[0]
-    const reader = new FileReader()
+    const file = event.target.files[0];
+    const reader = new FileReader();
     reader.onload = function (e) {
-      const text = e.target.result
+      const text = e.target.result;
       try {
-        let mergedRoutes = []
-        let mergedTabs = []
-        const data = encryptDecrypt(text as string, 'upload')
-        const result = JSON.parse(data)
-        const { secret, proxyRoutes: routes, groups: tabs } = result
+        let mergedRoutes = [];
+        let mergedTabs = [];
+        const data = encryptDecrypt(text as string, 'upload');
+        const result = JSON.parse(data);
+        const { secret, proxyRoutes: routes, groups: tabs } = result;
 
         if (secret === 'MOCK') {
           if (routes) {
             mergedRoutes = proxyRoutes.concat(routes).reduce(
               (acc, current) => {
                 if (!acc.map[current[PROXY_ROUTE_KEY.ID]]) {
-                  acc.map[current[PROXY_ROUTE_KEY.ID]] = true
-                  acc.result.push(current)
+                  acc.map[current[PROXY_ROUTE_KEY.ID]] = true;
+                  acc.result.push(current);
                 }
-                return acc
+                return acc;
               },
               { map: {}, result: [] }
-            ).result
-            setProxyRoutes([...mergedRoutes])
+            ).result;
+            setProxyRoutes([...mergedRoutes]);
           }
           if (groups) {
             mergedTabs = groups.concat(tabs).reduce(
               (acc, current) => {
                 if (!acc.map[current[GROUP_KEY.VALUE]]) {
-                  acc.map[current[GROUP_KEY.VALUE]] = true
-                  acc.result.push(current)
+                  acc.map[current[GROUP_KEY.VALUE]] = true;
+                  acc.result.push(current);
                 }
-                return acc
+                return acc;
               },
               { map: {}, result: [] }
-            ).result
-            setGroups([...mergedTabs])
+            ).result;
+            setGroups([...mergedTabs]);
           }
           openNotificationWithIcon(
             'success',
             '导入成功',
             `成功导入${mergedTabs.length - groups.length}条分组，${mergedRoutes.length - proxyRoutes.length}条数据`
-          )
+          );
         } else {
-          openNotificationWithIcon('warning', '导入失败', '导入失败，请检查数据格式')
+          openNotificationWithIcon('warning', '导入失败', '导入失败，请检查数据格式');
         }
       } catch (error) {
-        console.error(error)
-        openNotificationWithIcon('warning', '导入失败', '导入失败，请检查数据格式')
+        console.error(error);
+        openNotificationWithIcon('warning', '导入失败', '导入失败，请检查数据格式');
       }
-      fileInputRef.current.value = ''
-    }
-    reader.readAsText(file)
-  }
+      fileInputRef.current.value = '';
+    };
+    reader.readAsText(file);
+  };
 
   const onChange = (newActiveKey: string) => {
-    setFilter({ ...filter, group: newActiveKey })
-  }
+    setFilter({ ...filter, group: newActiveKey });
+  };
 
   const add = () => {
-    setDrawerData({ open: true, data: null })
-  }
+    setDrawerData({ open: true, data: null });
+  };
 
   const remove = (targetKey: TargetKey, empty = false) => {
-    setFilter({ ...filter, group: '' })
-    setGroups((last) => [...last.filter((item) => item.value !== targetKey)])
+    setFilter({ ...filter, group: '' });
+    setGroups((last) => last.filter((item) => item.value !== targetKey));
     // 清空组下所有数据
     if (empty) {
-      setProxyRoutes(proxyRoutes.filter((item) => item[PROXY_ROUTE_KEY.GROUP] !== targetKey))
+      setProxyRoutes(proxyRoutes.filter((item) => item[PROXY_ROUTE_KEY.GROUP] !== targetKey));
     } else {
       proxyRoutes
         .filter((item) => item[PROXY_ROUTE_KEY.GROUP] === targetKey)
         .forEach((v) => {
-          v[PROXY_ROUTE_KEY.GROUP] = ''
-        })
-      setProxyRoutes([...proxyRoutes])
+          v[PROXY_ROUTE_KEY.GROUP] = '';
+        });
+      setProxyRoutes([...proxyRoutes]);
     }
-    message.success('操作成功', 1)
-  }
+    message.success('操作成功', 1);
+  };
 
   const onEdit = (targetKey: React.MouseEvent | React.KeyboardEvent | string, action: 'add' | 'remove') => {
     if (action === 'add') {
-      add()
+      add();
     } else {
       modal.confirm({
         title: `确认删除当前分组-【${groups.find((v) => v.value === targetKey)?.label}】?`,
@@ -371,15 +372,15 @@ const App: React.FC = () => {
         okText: '确认',
         cancelText: '取消',
         onOk: () => {
-          remove(targetKey, emptyGroupMocks.current)
-          emptyGroupMocks.current = false
+          remove(targetKey, emptyGroupMocks.current);
+          emptyGroupMocks.current = false;
         },
         onCancel: () => {
-          emptyGroupMocks.current = false
-        }
-      })
+          emptyGroupMocks.current = false;
+        },
+      });
     }
-  }
+  };
   return (
     <Layout style={{ height: '100%', overflow: 'auto', background: '#fff', minWidth: 1350 }}>
       {notificationContextHolder}
@@ -408,7 +409,7 @@ const App: React.FC = () => {
               icon={<UploadOutlined />}
               size={'middle'}
               onClick={() => {
-                fileInputRef.current.click()
+                fileInputRef.current.click();
               }}>
               导入
             </Button>
@@ -423,7 +424,7 @@ const App: React.FC = () => {
                       <Button size="small" danger type="link" icon={<ClearOutlined />}>
                         清空全部数据
                       </Button>
-                    )
+                    ),
                   },
                   {
                     key: '2',
@@ -436,7 +437,7 @@ const App: React.FC = () => {
                         style={{ color: 'black' }}>
                         全部禁用
                       </Button>
-                    )
+                    ),
                   },
                   {
                     key: '3',
@@ -449,8 +450,8 @@ const App: React.FC = () => {
                         style={{ color: 'black' }}>
                         全部启用
                       </Button>
-                    )
-                  }
+                    ),
+                  },
                 ],
                 onClick: (e) => {
                   switch (e.key) {
@@ -462,29 +463,29 @@ const App: React.FC = () => {
                         okText: '确认',
                         cancelText: '取消',
                         onOk: () => {
-                          setProxyRoutes([])
-                          setGroups([groups[0]])
-                          setFilter({ ...filter, group: '' })
-                          message.success('清空成功', 1)
-                        }
-                      })
-                      break
+                          setProxyRoutes([]);
+                          setGroups([groups[0]]);
+                          setFilter({ ...filter, group: '' });
+                          message.success('清空成功', 1);
+                        },
+                      });
+                      break;
                     }
                     case '2': {
-                      setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: false })))
-                      message.success('已全部禁用', 1)
-                      break
+                      setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: false })));
+                      message.success('已全部禁用', 1);
+                      break;
                     }
                     case '3': {
-                      setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: true })))
-                      message.success('已全部启用', 1)
-                      break
+                      setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: true })));
+                      message.success('已全部启用', 1);
+                      break;
                     }
                     default: {
-                      break
+                      break;
                     }
                   }
-                }
+                },
               }}>
               <SwitcherOutlined />
               批量操作
@@ -507,7 +508,7 @@ const App: React.FC = () => {
             background: colorBgContainer,
             minHeight: 280,
             padding: 24,
-            borderRadius: borderRadiusLG
+            borderRadius: borderRadiusLG,
           }}>
           <Flex justify="space-between" align="center">
             <Space size={20}>
@@ -533,8 +534,8 @@ const App: React.FC = () => {
                 showSearch
                 optionFilterProp="children"
                 filterOption={(input, option) => {
-                  const arrOption = option?.value?.toString().split('$').slice(0, 2)
-                  return arrOption.some((v) => v.toLowerCase().includes(input.toLowerCase()))
+                  const arrOption = option?.value?.toString().split('$').slice(0, 2);
+                  return arrOption.some((v) => v.toLowerCase().includes(input.toLowerCase()));
                 }}
                 filterSort={(optionA, optionB) =>
                   (optionA?.value?.toString() ?? '')
@@ -543,11 +544,11 @@ const App: React.FC = () => {
                 }
                 placeholder="全局搜索：MOCK名、URL地址"
                 onChange={(value) => {
-                  const url = value?.value?.split('$')?.[0]
+                  const url = value?.value?.split('$')?.[0];
                   if (url) {
-                    const filter = url === '*' ? '' : url
-                    const selectedItem = proxyRoutes.find((item) => item.url === filter)
-                    setFilter({ ...filter, group: selectedItem?.group || '' })
+                    const filter = url === '*' ? '' : url;
+                    const selectedItem = proxyRoutes.find((item) => item.url === filter);
+                    setFilter({ ...filter, group: selectedItem?.group || '' });
                   }
                 }}>
                 {proxyRoutes.map((item) => (
@@ -584,8 +585,8 @@ const App: React.FC = () => {
                   </div>
                 ),
                 key: v?.value,
-                closable: v?.closable
-              }
+                closable: v?.closable,
+              };
             })}
           />
         </div>
@@ -604,7 +605,7 @@ const App: React.FC = () => {
           </Button>,
           <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
             确认
-          </Button>
+          </Button>,
         ]}>
         <EditForm form={form} isAll={isAll} setIsAll={setIsAll} />
       </Modal>
@@ -612,12 +613,12 @@ const App: React.FC = () => {
         drawerData={drawerData}
         setDrawerData={setDrawerData}
         onSubmit={(v) => {
-          setFilter({ ...filter, group: v.value })
-          message.success(v.type === 'add' ? '新建成功' : '编辑成功', 1)
+          setFilter({ ...filter, group: v.value });
+          message.success(v.type === 'add' ? '新建成功' : '编辑成功', 1);
         }}
       />
     </Layout>
-  )
-}
+  );
+};
 
-export default App
+export default App;

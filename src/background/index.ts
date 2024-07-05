@@ -1,2 +1,2 @@
-import './notification'
-import "./ctx-menu"
+import './notification';
+import './ctx-menu';

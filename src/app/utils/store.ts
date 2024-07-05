@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Storage } from "@plasmohq/storage"
+import { Storage } from '@plasmohq/storage';
 
 export enum STORE_KEY {
   ROUTES = 'routes',
@@ -17,23 +17,23 @@ export enum globalSwitchConfig {
 }
 
 export type TYPE_GLOBAL_SWITCH_CONFIG = {
-  [globalSwitchConfig.MOCK]: boolean,
-  [globalSwitchConfig.COPY]: boolean,
-}
+  [globalSwitchConfig.MOCK]: boolean;
+  [globalSwitchConfig.COPY]: boolean;
+};
 
 const store = new Storage({
-  area: "sync",
+  area: 'sync',
   copiedKeyList: [],
-})
+});
 
 store.watch({
   [STORE_KEY.GROUPS]: (c) => {
     const map = {};
-    (c?.newValue || []).forEach(element => {
-      map[element.value] = element.label
+    (c?.newValue || []).forEach((element) => {
+      map[element.value] = element.label;
     });
-    store.set(STORE_KEY.GROUPS_MAP, map)
+    store.set(STORE_KEY.GROUPS_MAP, map);
   },
-})
+});
 
-export default store
+export default store;

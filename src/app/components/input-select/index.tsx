@@ -1,16 +1,16 @@
-import { PlusOutlined } from '@ant-design/icons'
-import { Button, Divider, Flex, Input, Select } from 'antd'
-import type { InputRef, SelectProps } from 'antd'
-import React, { useRef, useState } from 'react'
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Divider, Flex, Input, Select } from 'antd';
+import type { InputRef, SelectProps } from 'antd';
+import React, { useRef, useState } from 'react';
 
 interface IProps {
-  onChange?: (v) => void
-  onAdd?: (v) => void
-  value?: string
-  isInputNumber?: boolean
-  options: SelectProps['options']
-  placeholder?: string
-  inputAddonAfter?: React.ReactNode | string
+  onChange?: (v) => void;
+  onAdd?: (v) => void;
+  value?: string;
+  isInputNumber?: boolean;
+  options: SelectProps['options'];
+  placeholder?: string;
+  inputAddonAfter?: React.ReactNode | string;
 }
 const App: React.FC<IProps> = (props: IProps) => {
   const {
@@ -20,30 +20,30 @@ const App: React.FC<IProps> = (props: IProps) => {
     value,
     placeholder,
     isInputNumber = false,
-    inputAddonAfter
-  } = props
-  const [val, setVal] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
-  const inputRef = useRef<InputRef>(null)
+    inputAddonAfter,
+  } = props;
+  const [val, setVal] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const inputRef = useRef<InputRef>(null);
   const onInputChange = (event) => {
-    setVal(event.target.value)
-  }
+    setVal(event.target.value);
+  };
   const handleDropdownVisibleChange = (open) => {
-    setIsOpen(open)
-  }
+    setIsOpen(open);
+  };
   const addItem = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
     // 输入框有值时才触发添加
     if (val.trim()) {
-      onChange(val)
-      onAdd(val)
-      setVal('')
-      setIsOpen(false)
+      onChange(val);
+      onAdd(val);
+      setVal('');
+      setIsOpen(false);
     } else {
-      inputRef.current?.focus()
+      inputRef.current?.focus();
     }
-  }
+  };
 
   return (
     <Select
@@ -80,7 +80,7 @@ const App: React.FC<IProps> = (props: IProps) => {
       )}
       options={options}
     />
-  )
-}
+  );
+};
 
-export default App
+export default App;

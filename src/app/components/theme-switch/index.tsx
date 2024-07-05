@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React from "react"
+import { css } from '@emotion/react';
+import React from 'react';
 
 interface IProps {
-  value?: string
-  checked?: boolean,
+  value?: string;
+  checked?: boolean;
   // eslint-disable-next-line no-unused-vars
-  onChange: (value?: boolean) => void
+  onChange: (value?: boolean) => void;
 }
 /**
  * slider-switch组件
@@ -15,7 +15,7 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function SliderSwitch(props: IProps): React.ReactElement {
-  const { value = "dark", onChange, checked } = props
+  const { value = 'dark', onChange, checked } = props;
   const innerStyle = css`
     display: flex;
     align-items: center;
@@ -136,7 +136,7 @@ export default function SliderSwitch(props: IProps): React.ReactElement {
     .theme__toggle:before {
       background-color: hsl(48, 90%, 55%);
       border-radius: 50%;
-      content: "";
+      content: '';
       width: 2.5em;
       height: 2.5em;
       transition: 0.3s;
@@ -221,11 +221,20 @@ export default function SliderSwitch(props: IProps): React.ReactElement {
         box-shadow: 0 0 0 0.125em var(--primary);
       }
     }
-  `
+  `;
   return (
     <label htmlFor="theme" className="theme" css={innerStyle}>
       <span className="theme__toggle-wrap">
-        <input checked={checked} id="theme" className="theme__toggle" type="checkbox" role="switch" name="theme" value={value} onChange={(e) => onChange(e.target.checked)} />
+        <input
+          checked={checked}
+          id="theme"
+          className="theme__toggle"
+          type="checkbox"
+          role="switch"
+          name="theme"
+          value={value}
+          onChange={(e) => onChange(e.target.checked)}
+        />
         <span className="theme__fill" />
         <span className="theme__icon">
           <span className="theme__icon-part" />
@@ -240,5 +249,5 @@ export default function SliderSwitch(props: IProps): React.ReactElement {
         </span>
       </span>
     </label>
-  )
+  );
 }

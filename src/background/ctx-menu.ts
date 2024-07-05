@@ -1,8 +1,8 @@
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.id && chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'openSidePanel',
     title: '侧边栏',
-    contexts: ['all']
+    contexts: ['all'],
   });
 });
 

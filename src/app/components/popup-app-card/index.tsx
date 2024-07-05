@@ -1,31 +1,31 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import { Button, Divider, Drawer, Flex, Popover, Space, Spin, Tooltip } from 'antd'
-import React from 'react'
+import { css } from '@emotion/react';
+import { Button, Divider, Drawer, Flex, Popover, Space, Spin, Tooltip } from 'antd';
+import React from 'react';
 
-import Turn from '~app/components/turn-switch'
+import Turn from '~app/components/turn-switch';
 
-import defaultSvg from '/assets/svg/defaultAppIcon.svg'
-import setting from '/assets/svg/setting.svg'
+import defaultSvg from '/assets/svg/defaultAppIcon.svg';
+import setting from '/assets/svg/setting.svg';
 
 interface IProps {
-  loading?: boolean
-  children?: React.ReactElement
-  name?: string
-  description?: string
-  backgroundColor?: string
-  color?: string
-  icon?: React.ReactElement
-  width?: string
-  height?: string
-  settingIcon?: boolean // 是否展示setting按钮
-  clickable?: boolean // 是否可直接点击
-  showSwitch?: boolean // 是否展示开关
-  onClick?: () => void
-  enable?: boolean
+  loading?: boolean;
+  children?: React.ReactElement;
+  name?: string;
+  description?: string;
+  backgroundColor?: string;
+  color?: string;
+  icon?: React.ReactElement;
+  width?: string;
+  height?: string;
+  settingIcon?: boolean; // 是否展示setting按钮
+  clickable?: boolean; // 是否可直接点击
+  showSwitch?: boolean; // 是否展示开关
+  onClick?: () => void;
+  enable?: boolean;
   // eslint-disable-next-line no-unused-vars
-  onEnableChange?: (value?: boolean) => void
+  onEnableChange?: (value?: boolean) => void;
 }
 /**
  * AppCard组件
@@ -47,8 +47,8 @@ export default function AppCard(props: IProps): React.ReactElement {
     clickable = false, // 是否可直接点击
     settingIcon = false, // 是否展示setting按钮
     showSwitch = true,
-    onEnableChange = () => {}
-  } = props
+    onEnableChange = () => {},
+  } = props;
   const innerStyle = css`
     border-radius: 10px;
     width: ${width || '110px'};
@@ -149,7 +149,7 @@ export default function AppCard(props: IProps): React.ReactElement {
       -ms-user-select: none; /* Internet Explorer/Edge */
       user-select: none;
     }
-  `
+  `;
   return (
     <div className="item item--1" css={innerStyle} onClick={clickable ? onClick : undefined}>
       {settingIcon && (
@@ -166,5 +166,5 @@ export default function AppCard(props: IProps): React.ReactElement {
         </div>
       )}
     </div>
-  )
+  );
 }

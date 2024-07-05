@@ -1,10 +1,11 @@
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
-import type { PopconfirmProps, TableColumnsType } from 'antd'
-import { Button, message, Popconfirm, Switch, Table, Tag, Tooltip, Typography } from 'antd'
-import React, { useState, useEffect, useRef } from 'react'
-import store, { STORE_KEY } from '~app/utils/store'
-import { GROUP_KEY, type GROUP_ITEM } from '~app/constants/group'
-import Provider from '~app/components/provider'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import type { PopconfirmProps, TableColumnsType } from 'antd';
+import { Button, message, Popconfirm, Switch, Table, Tag, Tooltip, Typography } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { useStorage } from '@plasmohq/storage/hook';
+
+import Provider from '~app/components/provider';
 import {
   MATCH_TYPE_DICT,
   MOCK_TYPE,
@@ -12,48 +13,50 @@ import {
   MOCK_TYPE_DICT_SHADOW,
   OPERATE_TYPE,
   PROXY_ROUTE_KEY,
-  REQUEST_TYPE_DICT
-} from '~app/constants'
-import type { PROXY_ROUTE_ITEM } from '~app/constants'
-import type { TFilter } from '~tabs/mock'
-import { useStorage } from '@plasmohq/storage/hook'
-import s from './index.module.scss'
+  REQUEST_TYPE_DICT,
+} from '~app/constants';
+import type { PROXY_ROUTE_ITEM } from '~app/constants';
+import { type GROUP_ITEM, GROUP_KEY } from '~app/constants/group';
+import store, { STORE_KEY } from '~app/utils/store';
+import type { TFilter } from '~tabs/mock';
 
-const { Paragraph, Text } = Typography
+import s from './index.module.scss';
 
-type DataType = PROXY_ROUTE_ITEM & Partial<{ id: string; index: number }>
+const { Paragraph, Text } = Typography;
+
+type DataType = PROXY_ROUTE_ITEM & Partial<{ id: string; index: number }>;
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
   onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
   getCheckboxProps: (record: DataType) => ({
     disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name
-  })
-}
+    name: record.name,
+  }),
+};
 interface IProps {
-  dataSource: DataType[]
-  filter: TFilter
+  dataSource: DataType[];
+  filter: TFilter;
   // eslint-disable-next-line no-unused-vars
-  callback: (opt: string, record) => void
+  callback: (opt: string, record) => void;
 }
 const App: React.FC<IProps> = React.memo((props: IProps) => {
-  const { dataSource, callback = () => {}, filter } = props
-  const [groupMap] = useStorage(STORE_KEY.GROUPS_MAP, {})
+  const { dataSource, callback = () => {}, filter } = props;
+  const [groupMap] = useStorage(STORE_KEY.GROUPS_MAP, {});
   const data: DataType[] = (dataSource || [])
     .map((v, i) => ({
       ...v,
       id: v?.id ?? `${i}`,
-      index: i
+      index: i,
     }))
     .filter(
       filter?.keyWords
         ? (v) => v?.name?.includes(filter?.keyWords ?? '') || v?.url?.includes(filter?.keyWords ?? '')
         : () => true
     )
-    .filter(filter?.group ? (v) => v?.group === filter?.group : (v) => !v?.group)
+    .filter(filter?.group ? (v) => v?.group === filter?.group : (v) => !v?.group);
   const columns: TableColumnsType<DataType> = [
     {
       title: 'MOCK类型',
@@ -65,11 +68,11 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
           italic
           strong
           style={{
-            boxShadow: MOCK_TYPE_DICT_SHADOW[text]
+            boxShadow: MOCK_TYPE_DICT_SHADOW[text],
           }}>
           {MOCK_TYPE_DICT[text]}
         </Text>
-      )
+      ),
     },
     {
       title: '是否开启',
@@ -83,17 +86,17 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
           onChange={(checked) => {
             callback(OPERATE_TYPE.UPDATE_RECORD, {
               ...record,
-              [PROXY_ROUTE_KEY.ENABLE]: checked
-            })
+              [PROXY_ROUTE_KEY.ENABLE]: checked,
+            });
           }}
         />
-      )
+      ),
     },
     {
       title: '当前分组',
       dataIndex: PROXY_ROUTE_KEY.GROUP,
       key: PROXY_ROUTE_KEY.GROUP,
-      render: (text: string) => (<Text strong>{groupMap[text] || '默认分组'}</Text>)
+      render: (text: string) => <Text strong>{groupMap[text] || '默认分组'}</Text>,
     },
     {
       title: 'MOCK名',
@@ -105,15 +108,15 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
         </Tooltip>
       ),
       ellipsis: {
-        showTitle: false
-      }
+        showTitle: false,
+      },
     },
     {
       title: 'URL地址',
       dataIndex: PROXY_ROUTE_KEY.URL,
       key: PROXY_ROUTE_KEY.URL,
       ellipsis: {
-        showTitle: false
+        showTitle: false,
       },
       render: (text: string, record) => {
         // prettier-ignore
@@ -124,14 +127,14 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
           <Tooltip color="purple" title={`${text}${redirectText}`}>
             <span>{!record[PROXY_ROUTE_KEY.MATCH_TYPE] && !text ? '*' : `${text}${redirectText}`}</span>
           </Tooltip>
-        )
-      }
+        );
+      },
     },
     {
       title: 'URL匹配方式',
       dataIndex: PROXY_ROUTE_KEY.MATCH_TYPE,
       key: PROXY_ROUTE_KEY.MATCH_TYPE,
-      render: (text: string) => (text ? <Text code>{MATCH_TYPE_DICT[text]}</Text> : '-')
+      render: (text: string) => (text ? <Text code>{MATCH_TYPE_DICT[text]}</Text> : '-'),
     },
     {
       title: '请求方式',
@@ -146,16 +149,16 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
           [REQUEST_TYPE_DICT.patch.toLowerCase()]: 'purple',
           [REQUEST_TYPE_DICT.options.toLowerCase()]: 'volcano',
           [REQUEST_TYPE_DICT.head.toLowerCase()]: 'orange',
-          [REQUEST_TYPE_DICT.trace.toLowerCase()]: 'lime'
-        }
-        return <span>{text ? <Tag color={config[text]}>{REQUEST_TYPE_DICT[text]}</Tag> : '-'}</span>
-      }
+          [REQUEST_TYPE_DICT.trace.toLowerCase()]: 'lime',
+        };
+        return <span>{text ? <Tag color={config[text]}>{REQUEST_TYPE_DICT[text]}</Tag> : '-'}</span>;
+      },
     },
     {
       title: '延迟时间',
       dataIndex: PROXY_ROUTE_KEY.DELAY,
       key: PROXY_ROUTE_KEY.DELAY,
-      render: (text: string) => <span>{text === '0' ? '无延迟' : text ? text + ' ms' : '-'}</span>
+      render: (text: string) => <span>{text === '0' ? '无延迟' : text ? text + ' ms' : '-'}</span>,
     },
     {
       title: '操作',
@@ -174,8 +177,8 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
             title={'删除记录'}
             description={<p style={{ marginTop: 10 }} />}
             onConfirm={() => {
-              callback(OPERATE_TYPE.DELETE, record)
-              message.success('删除成功！')
+              callback(OPERATE_TYPE.DELETE, record);
+              message.success('删除成功！');
             }}
             okText="确认"
             cancelText="取消">
@@ -191,10 +194,10 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
             置顶
           </Button>
         </>
-      )
-    }
-  ]
-  
+      ),
+    },
+  ];
+
   return (
     <Provider>
       {/* <Radio.Group
@@ -217,7 +220,7 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
         dataSource={data}
       />
     </Provider>
-  )
-})
-App.displayName = 'MockTable'
-export default App
+  );
+});
+App.displayName = 'MockTable';
+export default App;

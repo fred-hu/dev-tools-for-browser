@@ -1,21 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { convertDictToArray } from '~app/utils'
+import { convertDictToArray } from '~app/utils';
 
-import { HTTP_STATUS_CODE, HTTP_STATUS_CODE_DICT } from './httpStatus'
+import { HTTP_STATUS_CODE, HTTP_STATUS_CODE_DICT } from './httpStatus';
 
 export const MESSAGE_TYPES = {
   MATCHING_UPDATE: 'matchingUpdate',
   SET_LOADING: 'setLoading',
   SET_RECORD: 'setRecord',
   SET_QR_CODE: 'setQrCode',
-}
+};
 
 export enum OPERATE_TYPE {
   EDIT = 'edit',
   DELETE = 'delete',
   UPDATE_RECORD = 'updateRecord',
   TOP = 'top',
-  CLONE = 'clone'
+  CLONE = 'clone',
 }
 export enum REQUEST_TYPE {
   ALL = '*',
@@ -26,7 +26,7 @@ export enum REQUEST_TYPE {
   HEAD = 'head', // 类似于 GET 请求，但只返回首部，不返回实际内容。
   OPTIONS = 'options', // 用于描述对目标资源的通信选项。
   PATCH = 'patch', // 用于对资源进行局部修改，即对资源的部分内容进行更新或修改
-  TRACE = 'trace' // 回显服务器收到的请求，主要用于测试或诊断。
+  TRACE = 'trace', // 回显服务器收到的请求，主要用于测试或诊断。
 }
 export const REQUEST_TYPE_DICT = {
   [REQUEST_TYPE.ALL]: '不限',
@@ -37,9 +37,9 @@ export const REQUEST_TYPE_DICT = {
   [REQUEST_TYPE.HEAD]: 'HEAD',
   [REQUEST_TYPE.OPTIONS]: 'OPTIONS',
   [REQUEST_TYPE.PATCH]: 'PATCH',
-  [REQUEST_TYPE.TRACE]: 'TRACE'
-}
-export const REQUEST_TYPE_OPTIONS = convertDictToArray(REQUEST_TYPE_DICT)
+  [REQUEST_TYPE.TRACE]: 'TRACE',
+};
+export const REQUEST_TYPE_OPTIONS = convertDictToArray(REQUEST_TYPE_DICT);
 
 export enum PROXY_ROUTE_KEY {
   ID = 'id',
@@ -59,39 +59,39 @@ export enum PROXY_ROUTE_KEY {
   REQUEST_HEADERS = 'requestHeaders',
   MOCK_RESPONSE_HEADERS = 'mockResponseHeaders',
   ENABLE_MOCK_RESPONSE_HEADERS = 'enableMockResponseHeaders',
-  RESPONSE_HEADERS = 'responseHeaders'
+  RESPONSE_HEADERS = 'responseHeaders',
 }
 export type PROXY_ROUTE_ITEM = {
-  [PROXY_ROUTE_KEY.ID]: string
-  [PROXY_ROUTE_KEY.MOCK_TYPE]: MOCK_TYPE
-  [PROXY_ROUTE_KEY.ENABLE]: boolean
-  [PROXY_ROUTE_KEY.MATCH_TYPE]: MATCH_TYPE
-  [PROXY_ROUTE_KEY.REQUEST_TYPE]: REQUEST_TYPE
-  [PROXY_ROUTE_KEY.RESPONSE_STATUS]: string
-  [PROXY_ROUTE_KEY.REDIRECT_URL]: string
-  [PROXY_ROUTE_KEY.DELAY]: number
-  [PROXY_ROUTE_KEY.URL]: string
-  [PROXY_ROUTE_KEY.GROUP]: string
-  [PROXY_ROUTE_KEY.NAME]: string
-  [PROXY_ROUTE_KEY.RESPONSE]: undefined | string
-  [PROXY_ROUTE_KEY.REQUEST_HEADERS]: any[]
-  [PROXY_ROUTE_KEY.RESPONSE_HEADERS]: any[]
-  [PROXY_ROUTE_KEY.MOCK_REQUEST_HEADERS]: any[]
-  [PROXY_ROUTE_KEY.ENABLE_MOCK_REQUEST_HEADERS]: boolean
-  [PROXY_ROUTE_KEY.MOCK_RESPONSE_HEADERS]: any[]
-  [PROXY_ROUTE_KEY.ENABLE_MOCK_RESPONSE_HEADERS]: boolean
-}
+  [PROXY_ROUTE_KEY.ID]: string;
+  [PROXY_ROUTE_KEY.MOCK_TYPE]: MOCK_TYPE;
+  [PROXY_ROUTE_KEY.ENABLE]: boolean;
+  [PROXY_ROUTE_KEY.MATCH_TYPE]: MATCH_TYPE;
+  [PROXY_ROUTE_KEY.REQUEST_TYPE]: REQUEST_TYPE;
+  [PROXY_ROUTE_KEY.RESPONSE_STATUS]: string;
+  [PROXY_ROUTE_KEY.REDIRECT_URL]: string;
+  [PROXY_ROUTE_KEY.DELAY]: number;
+  [PROXY_ROUTE_KEY.URL]: string;
+  [PROXY_ROUTE_KEY.GROUP]: string;
+  [PROXY_ROUTE_KEY.NAME]: string;
+  [PROXY_ROUTE_KEY.RESPONSE]: undefined | string;
+  [PROXY_ROUTE_KEY.REQUEST_HEADERS]: any[];
+  [PROXY_ROUTE_KEY.RESPONSE_HEADERS]: any[];
+  [PROXY_ROUTE_KEY.MOCK_REQUEST_HEADERS]: any[];
+  [PROXY_ROUTE_KEY.ENABLE_MOCK_REQUEST_HEADERS]: boolean;
+  [PROXY_ROUTE_KEY.MOCK_RESPONSE_HEADERS]: any[];
+  [PROXY_ROUTE_KEY.ENABLE_MOCK_RESPONSE_HEADERS]: boolean;
+};
 
 export enum MOCK_TYPE {
   NORMAL = 'normal',
   REDIRECT = 'redirect',
-  MODIFY_HEADERS = 'modifyHeaders'
+  MODIFY_HEADERS = 'modifyHeaders',
 }
 export const MOCK_TYPE_DICT = {
   [MOCK_TYPE.NORMAL]: 'Mock',
   [MOCK_TYPE.REDIRECT]: 'Redirect',
-  [MOCK_TYPE.MODIFY_HEADERS]: 'ModifyHeaders'
-}
+  [MOCK_TYPE.MODIFY_HEADERS]: 'ModifyHeaders',
+};
 export const MOCK_TYPE_DICT_SHADOW = {
   [MOCK_TYPE.NORMAL]:
     // eslint-disable-next-line max-len
@@ -101,20 +101,20 @@ export const MOCK_TYPE_DICT_SHADOW = {
     '2px 2px 68px 0px rgba(189, 16, 224, 0.5), inset -9px -9px 16px 0px rgba(189, 16, 224, 0.6), inset 0px 11px 28px 0px rgb(255, 255, 255)',
   [MOCK_TYPE.MODIFY_HEADERS]:
     // eslint-disable-next-line max-len
-    '2px 2px 68px 0px rgba(184, 233, 134, 0.5), inset -8px -8px 16px 0px rgba(184, 233, 134, 0.6), inset 0px 11px 28px 0px rgb(255, 255, 255)'
-}
-export const MOCK_TYPE_OPTIONS = convertDictToArray(MOCK_TYPE_DICT)
+    '2px 2px 68px 0px rgba(184, 233, 134, 0.5), inset -8px -8px 16px 0px rgba(184, 233, 134, 0.6), inset 0px 11px 28px 0px rgb(255, 255, 255)',
+};
+export const MOCK_TYPE_OPTIONS = convertDictToArray(MOCK_TYPE_DICT);
 
 export enum MATCH_TYPE {
   CONTAINS = 'contains',
   EQUALS = 'equals',
-  REGEXP = 'regexp'
+  REGEXP = 'regexp',
 }
 export const MATCH_TYPE_DICT = {
   [MATCH_TYPE.CONTAINS]: 'contains',
   [MATCH_TYPE.EQUALS]: 'equals',
-  [MATCH_TYPE.REGEXP]: 'regexp'
-}
+  [MATCH_TYPE.REGEXP]: 'regexp',
+};
 
 export enum ResourceType {
   MAIN_FRAME = 'main_frame',
@@ -131,7 +131,7 @@ export enum ResourceType {
   WEBSOCKET = 'websocket',
   OTHER = 'other',
   WEBBUNDLE = 'webbundle',
-  WEBTRANSPORT = 'webtransport'
+  WEBTRANSPORT = 'webtransport',
 }
 
 export enum RuleActionType {
@@ -140,28 +140,28 @@ export enum RuleActionType {
   ALLOW = 'allow',
   UPGRADE_SCHEME = 'upgradeScheme',
   MODIFY_HEADERS = 'modifyHeaders',
-  ALLOW_ALL_REQUESTS = 'allowAllRequests'
+  ALLOW_ALL_REQUESTS = 'allowAllRequests',
 }
 
-export const MATCH_TYPE_OPTIONS = convertDictToArray(MATCH_TYPE_DICT)
+export const MATCH_TYPE_OPTIONS = convertDictToArray(MATCH_TYPE_DICT);
 
 export const HTTP_STATUS_CODE_OPTIONS = Object.keys(HTTP_STATUS_CODE_DICT).map((v) => ({
   value: +v,
-  label: `${v} ${HTTP_STATUS_CODE_DICT[v]}`
-}))
+  label: `${v} ${HTTP_STATUS_CODE_DICT[v]}`,
+}));
 
 export enum GLOBAL_VARIABLE {
   CHROME_PLUS_ORIGINAL_XHR = 'CHROME_PLUS_ORIGINAL_XHR',
   CHROME_PLUS_REQUEST_MAP = 'CHROME_PLUS_REQUEST_MAP',
   CHROME_PLUS_PROXY_XHR = 'CHROME_PLUS_PROXY_XHR',
-  CHROME_PLUS_PROXY_ROUTES = 'CHROME_PLUS_PROXY_ROUTES'
+  CHROME_PLUS_PROXY_ROUTES = 'CHROME_PLUS_PROXY_ROUTES',
 }
 export const GLOBAL_VARIABLE_MAP = {
   [GLOBAL_VARIABLE.CHROME_PLUS_ORIGINAL_XHR]: 'CHROME_PLUS_ORIGINAL_XHR',
   [GLOBAL_VARIABLE.CHROME_PLUS_REQUEST_MAP]: 'CHROME_PLUS_REQUEST_MAP',
   [GLOBAL_VARIABLE.CHROME_PLUS_PROXY_XHR]: 'CHROME_PLUS_PROXY_XHR',
-  [GLOBAL_VARIABLE.CHROME_PLUS_PROXY_ROUTES]: 'CHROME_PLUS_PROXY_ROUTES'
-}
+  [GLOBAL_VARIABLE.CHROME_PLUS_PROXY_ROUTES]: 'CHROME_PLUS_PROXY_ROUTES',
+};
 
 export const DEFAULT_REQUEST_HEADERS_KEYS = [
   'Accept', // Acceptable response Content-Types
@@ -195,8 +195,8 @@ export const DEFAULT_REQUEST_HEADERS_KEYS = [
   'User-Agent', // Browser identification string
   'Upgrade', // Ask the server to upgrade to another protocol
   'Via', // Informs the server of proxies through which the request was sent
-  'Warning' // General warning about possible errors in the entity body
-]
+  'Warning', // General warning about possible errors in the entity body
+];
 export const DEFAULT_RESPONSE_HEADERS_KEYS = [
   'Access-Control-Allow-Origin', // 指示哪些网站可以参与跨源访问。它的值可以是一个具体的URI，或者*表示允许任何域的访问。
   'Access-Control-Allow-Methods', // 指定允许跨源请求的HTTP方法，如GET, POST, PUT等。
@@ -243,8 +243,8 @@ export const DEFAULT_RESPONSE_HEADERS_KEYS = [
   'Vary', // Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server
   'Via', // Informs the client of proxies through which the response was sent
   'Warning', // A general warning about possible problems with the entity body
-  'WWW-Authenticate' // Indicates the authentication scheme that should be used to access the requested entity
-]
+  'WWW-Authenticate', // Indicates the authentication scheme that should be used to access the requested entity
+];
 export default {
   PROXY_ROUTE_KEY,
   MOCK_TYPE,
@@ -253,5 +253,5 @@ export default {
   MATCH_TYPE,
   HTTP_STATUS_CODE,
   MESSAGE_TYPES,
-  GLOBAL_VARIABLE_MAP
-}
+  GLOBAL_VARIABLE_MAP,
+};
