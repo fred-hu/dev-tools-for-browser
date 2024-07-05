@@ -16,11 +16,11 @@
   outline: none;
   background-color: #f3f3f4;
   color: #0d0c22;
-  transition: .3s ease;
+  transition: 0.3s ease;
   &::placeholder {
     color: #9e9ea7;
   }
-  
+
   &:focus,
   input:hover {
     outline: none;
@@ -29,8 +29,6 @@
     box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
   }
 }
-
-
 
 .icon {
   position: absolute;

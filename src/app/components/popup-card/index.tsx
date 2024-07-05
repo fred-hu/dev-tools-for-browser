@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React from "react"
+import { css } from '@emotion/react';
+import React from 'react';
 
 interface IProps {
-  children?: React.ReactElement
-  name?: string
-  description?: string
+  children?: React.ReactElement;
+  name?: string;
+  description?: string;
 }
 /**
  * MainTag组件
@@ -14,7 +14,7 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function MainTag(props: IProps): React.ReactElement {
-  const {name, description} = props;
+  const { name, description } = props;
   const innerStyle = css`
     width: 150px;
     background: #fff480;
@@ -94,7 +94,7 @@ export default function MainTag(props: IProps): React.ReactElement {
     .card:active {
       transform: scale(0.9);
     }
-  `
+  `;
   return (
     <div className="card" css={innerStyle}>
       <div className="card-content">
@@ -115,5 +115,5 @@ export default function MainTag(props: IProps): React.ReactElement {
         </svg>
       </div>
     </div>
-  )
+  );
 }

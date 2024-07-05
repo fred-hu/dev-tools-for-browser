@@ -5,11 +5,12 @@ export default {
   printWidth: 120,
   tabWidth: 2,
   useTabs: false,
-  semi: false,
+  semi: true,
   singleQuote: true,
-  trailingComma: "none",
+  trailingComma: "es5",
   bracketSpacing: true,
   bracketSameLine: true,
+  arrowParens: "always",
   plugins: ["@ianvs/prettier-plugin-sort-imports"],
   importOrder: [
     "<BUILTIN_MODULES>", // Node.js built-in modules

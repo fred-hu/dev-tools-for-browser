@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React from "react"
+import { css } from '@emotion/react';
+import React from 'react';
 
 interface IProps {
-  text?: string
-  width?: string
+  text?: string;
+  width?: string;
   // eslint-disable-next-line no-unused-vars
-  onClick?: (value?: boolean) => void
-  style?: React.CSSProperties
+  onClick?: (value?: boolean) => void;
+  style?: React.CSSProperties;
 }
 /**
  * Button3D组件
@@ -16,7 +16,7 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function Button3D(props: IProps): React.ReactElement {
-  const { text, onClick = () => {}, width, style={} } = props
+  const { text, onClick = () => {}, width, style = {} } = props;
   const innerStyle = css`
     color: #090909;
     width: ${width || 'auto'};
@@ -40,10 +40,10 @@ export default function Button3D(props: IProps): React.ReactElement {
         4px 4px 12px #c5c5c5,
         -4px -4px 12px #ffffff;
     }
-  `
+  `;
   return (
     <button css={innerStyle} onClick={() => onClick()} style={style}>
-      {text || "Button"}
+      {text || 'Button'}
     </button>
-  )
+  );
 }

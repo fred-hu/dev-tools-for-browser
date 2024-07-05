@@ -1,35 +1,35 @@
-import { CopyOutlined, FileOutlined } from '@ant-design/icons'
-import { Button, Flex, Input, message, Space } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { CopyOutlined, FileOutlined } from '@ant-design/icons';
+import { Button, Flex, Input, message, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
 
-import JsonEditor from '~app/components/json-editor'
-import { copyText, jsonToTsTypes } from '~app/utils'
+import JsonEditor from '~app/components/json-editor';
+import { copyText, jsonToTsTypes } from '~app/utils';
 
-const { TextArea } = Input
+const { TextArea } = Input;
 /**
  * 组件
  * @returns React.ReactElement
  */
 export default function UnnamedComponent(): React.ReactElement {
-  const [data, setData] = useState('')
-  const [ts, setTs] = useState('')
+  const [data, setData] = useState('');
+  const [ts, setTs] = useState('');
 
   const valid = (data) => {
     try {
-      const result = JSON.parse(data)
-      return result
+      const result = JSON.parse(data);
+      return result;
     } catch (error) {
-      return false
+      return false;
     }
-  }
+  };
   return (
     <div>
       <JsonEditor
         id="jstojson"
         value={data}
         onChange={(v) => {
-          setData(v)
-          setTs('')
+          setData(v);
+          setTs('');
         }}
       />
       <Flex style={{ marginTop: 10 }} justify="space-between">
@@ -37,12 +37,12 @@ export default function UnnamedComponent(): React.ReactElement {
           type="primary"
           icon={<FileOutlined />}
           onClick={() => {
-            setTs('')
-            const res = valid(data)
+            setTs('');
+            const res = valid(data);
             if (res) {
-              const result = jsonToTsTypes(res, 'RootType')
-              setTs(result)
-              message.success('转换成功', 1)
+              const result = jsonToTsTypes(res, 'RootType');
+              setTs(result);
+              message.success('转换成功', 1);
             }
           }}>
           转换
@@ -52,8 +52,8 @@ export default function UnnamedComponent(): React.ReactElement {
           disabled={!ts}
           icon={<CopyOutlined />}
           onClick={async () => {
-            await copyText(ts)
-            message.success('已复制', 1)
+            await copyText(ts);
+            message.success('已复制', 1);
           }}>
           复制结果
         </Button>
@@ -63,5 +63,5 @@ export default function UnnamedComponent(): React.ReactElement {
       </pre>
       {/* <TextArea rows={10} value={ts} readOnly /> */}
     </div>
-  )
+  );
 }

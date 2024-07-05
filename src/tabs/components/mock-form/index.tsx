@@ -1,19 +1,19 @@
-import { CheckOutlined, CloseOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, Select, Space, Switch, Tooltip, Typography } from 'antd'
-import type { SelectProps } from 'antd'
-import React, { useState } from 'react'
+import { CheckOutlined, CloseOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Flex, Form, Input, Select, Space, Switch, Tooltip, Typography } from 'antd';
+import type { SelectProps } from 'antd';
+import React, { useState } from 'react';
 
-import { useStorage } from '@plasmohq/storage/hook'
+import { useStorage } from '@plasmohq/storage/hook';
 
-import { GROUP_KEY } from '~app/constants/group'
-import type { GROUP_ITEM } from '~app/constants/group'
-import useGroupsStorage from '~app/hooks/useGroupsStorage'
-import { STORE_KEY } from '~app/utils/store'
+import { GROUP_KEY } from '~app/constants/group';
+import type { GROUP_ITEM } from '~app/constants/group';
+import useGroupsStorage from '~app/hooks/useGroupsStorage';
+import { STORE_KEY } from '~app/utils/store';
 
-import '~app/styles/tailwind.scss'
+import '~app/styles/tailwind.scss';
 
-import InputSelect from '~app/components/input-select'
-import JsonEditor from '~app/components/json-editor'
+import InputSelect from '~app/components/input-select';
+import JsonEditor from '~app/components/json-editor';
 import {
   DEFAULT_REQUEST_HEADERS_KEYS,
   DEFAULT_RESPONSE_HEADERS_KEYS,
@@ -24,19 +24,19 @@ import {
   MOCK_TYPE_OPTIONS,
   PROXY_ROUTE_KEY,
   REQUEST_TYPE,
-  REQUEST_TYPE_OPTIONS
-} from '~app/constants'
-import { HTTP_STATUS_CODE } from '~app/constants/httpStatus'
+  REQUEST_TYPE_OPTIONS,
+} from '~app/constants';
+import { HTTP_STATUS_CODE } from '~app/constants/httpStatus';
 
-const { Option } = Select
-const { Text } = Typography
+const { Option } = Select;
+const { Text } = Typography;
 export interface IProps {
-  form: any
+  form: any;
   // eslint-disable-next-line no-unused-vars
-  setIsAll: (bool: boolean) => void
-  isAll: boolean
+  setIsAll: (bool: boolean) => void;
+  isAll: boolean;
 }
-type OmitId<K extends string | number | symbol> = Exclude<K, typeof PROXY_ROUTE_KEY.ID>
+type OmitId<K extends string | number | symbol> = Exclude<K, typeof PROXY_ROUTE_KEY.ID>;
 /**
  * Form组件
  * @param {any} prop1 - xx属性
@@ -44,20 +44,20 @@ type OmitId<K extends string | number | symbol> = Exclude<K, typeof PROXY_ROUTE_
  * @returns React.ReactElement
  */
 export default function EditForm(props: IProps): React.ReactElement {
-  const { form, setIsAll = () => {}, isAll = false } = props
-  const formWidth = 680
-  const [groups, setGroups] = useGroupsStorage()
-  const mockType = Form.useWatch([PROXY_ROUTE_KEY.MOCK_TYPE], form) || MOCK_TYPE.NORMAL
-  const requestHeaders = Form.useWatch([PROXY_ROUTE_KEY.REQUEST_HEADERS], form)
-  const responseHeaders = Form.useWatch([PROXY_ROUTE_KEY.RESPONSE_HEADERS], form)
-  const enableRequestHeaders = Form.useWatch([PROXY_ROUTE_KEY.ENABLE_MOCK_REQUEST_HEADERS], form)
-  const enableResponseHeaders = Form.useWatch([PROXY_ROUTE_KEY.ENABLE_MOCK_RESPONSE_HEADERS], form)
+  const { form, setIsAll = () => {}, isAll = false } = props;
+  const formWidth = 680;
+  const [groups, setGroups] = useGroupsStorage();
+  const mockType = Form.useWatch([PROXY_ROUTE_KEY.MOCK_TYPE], form) || MOCK_TYPE.NORMAL;
+  const requestHeaders = Form.useWatch([PROXY_ROUTE_KEY.REQUEST_HEADERS], form);
+  const responseHeaders = Form.useWatch([PROXY_ROUTE_KEY.RESPONSE_HEADERS], form);
+  const enableRequestHeaders = Form.useWatch([PROXY_ROUTE_KEY.ENABLE_MOCK_REQUEST_HEADERS], form);
+  const enableResponseHeaders = Form.useWatch([PROXY_ROUTE_KEY.ENABLE_MOCK_RESPONSE_HEADERS], form);
   const [requestHeadersKeys] = useState<SelectProps['options']>(
     DEFAULT_REQUEST_HEADERS_KEYS.map((v) => ({ label: v, value: v }))
-  )
+  );
   const [responseHeadersKeys] = useState<SelectProps['options']>(
     DEFAULT_RESPONSE_HEADERS_KEYS.map((v) => ({ label: v, value: v }))
-  )
+  );
   const initialValues: Record<OmitId<PROXY_ROUTE_KEY>, any> = {
     [PROXY_ROUTE_KEY.DELAY]: '0',
     [PROXY_ROUTE_KEY.ENABLE_MOCK_REQUEST_HEADERS]: false,
@@ -75,18 +75,18 @@ export default function EditForm(props: IProps): React.ReactElement {
     [PROXY_ROUTE_KEY.ENABLE]: true,
     [PROXY_ROUTE_KEY.URL]: '',
     [PROXY_ROUTE_KEY.NAME]: '',
-    [PROXY_ROUTE_KEY.GROUP]: ''
-  }
+    [PROXY_ROUTE_KEY.GROUP]: '',
+  };
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
-      sm: { span: 5 }
+      sm: { span: 5 },
     },
     wrapperCol: {
       xs: { span: 24 },
-      sm: { span: 16 }
-    }
-  }
+      sm: { span: 16 },
+    },
+  };
   return (
     <Form
       initialValues={initialValues}
@@ -119,11 +119,11 @@ export default function EditForm(props: IProps): React.ReactElement {
           {
             validator: async (_, value) => {
               if (value === undefined) {
-                return Promise.reject(new Error('请选择分组'))
+                return Promise.reject(new Error('请选择分组'));
               }
-              return Promise.resolve()
-            }
-          }
+              return Promise.resolve();
+            },
+          },
         ]}>
         <Select placeholder="请选择分组">
           {groups.map((item, i) => (
@@ -221,7 +221,7 @@ export default function EditForm(props: IProps): React.ReactElement {
                   { label: '500', value: '500' },
                   { label: '1000', value: '1000' },
                   { label: '3000', value: '3000' },
-                  { label: '5000', value: '5000' }
+                  { label: '5000', value: '5000' },
                 ]}
                 placeholder="请选择延迟时间"
               />
@@ -289,20 +289,20 @@ export default function EditForm(props: IProps): React.ReactElement {
                 {
                   validator: (_, value) => {
                     if (value === undefined || value === null || value === '') {
-                      return Promise.resolve()
+                      return Promise.resolve();
                     }
                     try {
-                      const val = JSON.parse(value)
+                      const val = JSON.parse(value);
                       if (Object.prototype.toString.call(val) === '[object Object]' && value !== null) {
-                        return Promise.resolve()
+                        return Promise.resolve();
                       } else {
-                        return Promise.reject(new Error('请输入合法的对象'))
+                        return Promise.reject(new Error('请输入合法的对象'));
                       }
                     } catch (error) {
-                      return Promise.reject(new Error('请输入合法的对象'))
+                      return Promise.reject(new Error('请输入合法的对象'));
                     }
-                  }
-                }
+                  },
+                },
               ]}>
               <JsonEditor id="responseHeader" height="220px" placeholder="请输入返回头" />
             </Form.Item>
@@ -315,23 +315,23 @@ export default function EditForm(props: IProps): React.ReactElement {
               {
                 validator: (_, value) => {
                   if (value === undefined || value === null || value === '') {
-                    return Promise.resolve()
+                    return Promise.resolve();
                   }
                   try {
-                    const val = JSON.parse(value)
+                    const val = JSON.parse(value);
                     if (
                       (Array.isArray(val) || Object.prototype.toString.call(val) === '[object Object]') &&
                       value !== null
                     ) {
-                      return Promise.resolve()
+                      return Promise.resolve();
                     } else {
-                      return Promise.reject(new Error('请输入合法的数组或者对象'))
+                      return Promise.reject(new Error('请输入合法的数组或者对象'));
                     }
                   } catch (error) {
-                    return Promise.reject(new Error('请输入合法的数组或者对象'))
+                    return Promise.reject(new Error('请输入合法的数组或者对象'));
                   }
-                }
-              }
+                },
+              },
             ]}>
             <JsonEditor id="response" placeholder="请输入返回数据" />
           </Form.Item>
@@ -347,7 +347,7 @@ export default function EditForm(props: IProps): React.ReactElement {
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, ...restField }) => {
-                    const isNotRemove = requestHeaders?.[key]?.operationType !== 'remove'
+                    const isNotRemove = requestHeaders?.[key]?.operationType !== 'remove';
                     return (
                       <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                         <Form.Item
@@ -376,7 +376,7 @@ export default function EditForm(props: IProps): React.ReactElement {
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
-                    )
+                    );
                   })}
                   <Form.Item>
                     <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
@@ -395,7 +395,7 @@ export default function EditForm(props: IProps): React.ReactElement {
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, ...restField }) => {
-                    const isNotRemove = responseHeaders?.[key]?.operationType !== 'remove'
+                    const isNotRemove = responseHeaders?.[key]?.operationType !== 'remove';
                     return (
                       <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                         <Form.Item
@@ -425,7 +425,7 @@ export default function EditForm(props: IProps): React.ReactElement {
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
-                    )
+                    );
                   })}
                   <Form.Item>
                     <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
@@ -447,5 +447,5 @@ export default function EditForm(props: IProps): React.ReactElement {
         </Form.Item>
       )}
     </Form>
-  )
+  );
 }

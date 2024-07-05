@@ -1,10 +1,12 @@
 import zhCN from 'antd/locale/zh_CN';
+
 import 'dayjs/locale/zh-cn';
-import React from 'react';
+
 import { ConfigProvider } from 'antd';
+import React from 'react';
 
 interface IProps {
-  children?:  React.ReactElement;
+  children?: React.ReactElement;
 }
 
 /**
@@ -14,9 +16,5 @@ interface IProps {
  */
 export default function Provider(props: IProps): React.ReactElement {
   const { children } = props;
-  return (
-    <ConfigProvider locale={zhCN}>
-      {children}
-    </ConfigProvider>
-  );
+  return <ConfigProvider locale={zhCN}>{children}</ConfigProvider>;
 }

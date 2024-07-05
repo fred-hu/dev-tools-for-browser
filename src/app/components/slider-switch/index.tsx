@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React from "react"
+import { css } from '@emotion/react';
+import React from 'react';
 
 interface IProps {
-  checked?: boolean
+  checked?: boolean;
   // eslint-disable-next-line no-unused-vars
-  onChange: (value?: boolean) => void
+  onChange: (value?: boolean) => void;
 }
 /**
  * slider-switch组件
@@ -14,7 +14,7 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function SliderSwitch(props: IProps): React.ReactElement {
-  const { checked, onChange } = props
+  const { checked, onChange } = props;
   const innerStyle = css`
     --input-focus: #2d8cf0;
     --bg-color: #fff;
@@ -50,7 +50,7 @@ export default function SliderSwitch(props: IProps): React.ReactElement {
     }
 
     .slider:before {
-      content: "off";
+      content: 'off';
       box-sizing: border-box;
       height: 30px;
       width: 30px;
@@ -74,15 +74,15 @@ export default function SliderSwitch(props: IProps): React.ReactElement {
     }
 
     .toggle:checked + .slider:before {
-      content: "on";
+      content: 'on';
       transform: translateX(32px);
     }
-  `
+  `;
   return (
     <label className="switch" css={innerStyle}>
       <input checked={checked} type="checkbox" className="toggle" onChange={(e) => onChange(e.target.checked)} />
       <span className="slider" />
       <span className="card-side" />
     </label>
-  )
+  );
 }

@@ -1,19 +1,19 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import React from 'react'
+import { css } from '@emotion/react';
+import React from 'react';
 
-import download from '~assets/svg/download-white.svg'
-import upload from '~assets/svg/upload-white.svg'
+import download from '~assets/svg/download-white.svg';
+import upload from '~assets/svg/upload-white.svg';
 
 interface IProps {
   // eslint-disable-next-line no-unused-vars
-  onClick?: () => void
-  text?: string
-  width?: number
-  type?: 'download' | 'upload'
-  theme?: 'light' | 'dark'
+  onClick?: () => void;
+  text?: string;
+  width?: number;
+  type?: 'download' | 'upload';
+  theme?: 'light' | 'dark';
 }
 /**
  * download组件
@@ -21,7 +21,7 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function Download(props: IProps): React.ReactElement {
-  const { onClick = () => {}, text, width, theme = 'dark', type = 'download' } = props
+  const { onClick = () => {}, text, width, theme = 'dark', type = 'download' } = props;
   const innerStyle = css`
     --main-focus: ${theme === 'dark' ? '#2d8cf0' : '#2d8cf0'};
     --font-color: ${theme === 'dark' ? '#dedede' : '#323232'};
@@ -85,15 +85,15 @@ export default function Download(props: IProps): React.ReactElement {
       transform: translate(3px, 3px);
       box-shadow: 0px 0px var(--main-color);
     }
-  `
+  `;
   return (
     <button
       type="button"
       className="button"
       css={innerStyle}
       onClick={(e) => {
-        e.stopPropagation()
-        onClick()
+        e.stopPropagation();
+        onClick();
       }}>
       <span className="button__text">{text || 'Download'}</span>
       <span className="button__icon">
@@ -104,5 +104,5 @@ export default function Download(props: IProps): React.ReactElement {
         )}
       </span>
     </button>
-  )
+  );
 }

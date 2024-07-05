@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React from "react"
+import { css } from '@emotion/react';
+import React from 'react';
 
 interface IProps {
-  value?: string
-  checked?: boolean
+  value?: string;
+  checked?: boolean;
   // eslint-disable-next-line no-unused-vars
-  onChange: (value?: boolean) => void
+  onChange: (value?: boolean) => void;
 }
 /**
  * download-switch组件
@@ -15,7 +15,7 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function DownloadSwitch(props: IProps): React.ReactElement {
-  const { onChange, checked } = props
+  const { onChange, checked } = props;
   const innerStyle = css`
     padding: 0;
     margin: 0;
@@ -39,7 +39,7 @@ export default function DownloadSwitch(props: IProps): React.ReactElement {
     }
 
     .label::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       bottom: 0;
@@ -113,7 +113,7 @@ export default function DownloadSwitch(props: IProps): React.ReactElement {
     }
 
     .label .circle::before {
-      content: "";
+      content: '';
       position: absolute;
       left: 0;
       top: 0;
@@ -224,7 +224,7 @@ export default function DownloadSwitch(props: IProps): React.ReactElement {
         right: 56px;
       }
     }
-  `
+  `;
   return (
     <div className="container" css={innerStyle}>
       <label className="label">
@@ -245,5 +245,5 @@ export default function DownloadSwitch(props: IProps): React.ReactElement {
         <p className="title">Open</p>
       </label>
     </div>
-  )
+  );
 }

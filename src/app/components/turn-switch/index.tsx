@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+import React, { useState } from 'react';
 
 interface IProps {
-  checked: boolean
+  checked: boolean;
   // eslint-disable-next-line no-unused-vars
-  onChange: (value?: boolean) => void
+  onChange: (value?: boolean) => void;
 }
 /**
  * turn-switch组件
@@ -15,8 +15,8 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function TurnSwitch(props: IProps): React.ReactElement {
-  const { onChange, checked } = props
-  const [id] = useState(`${Math.random()}`)
+  const { onChange, checked } = props;
+  const [id] = useState(`${Math.random()}`);
   const innerStyle = css`
     .switch {
       display: none;
@@ -147,16 +147,16 @@ export default function TurnSwitch(props: IProps): React.ReactElement {
       -ms-user-select: none; /* Internet Explorer/Edge */
       user-select: none;
     }
-  `
+  `;
   const Div = styled.div`
     ${innerStyle}
-  `
+  `;
   return (
     <Div onClick={(e) => e.stopPropagation()}>
       <input
         checked={checked}
         onChange={(e) => {
-          onChange(e.target.checked)
+          onChange(e.target.checked);
         }}
         id={id}
         name={id}
@@ -175,5 +175,5 @@ export default function TurnSwitch(props: IProps): React.ReactElement {
         </span>
       </label>
     </Div>
-  )
+  );
 }

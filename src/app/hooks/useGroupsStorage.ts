@@ -1,7 +1,8 @@
-import { useStorage } from '@plasmohq/storage/hook'
-import { STORE_KEY } from '~app/utils/store'
-import { GROUP_KEY } from '~app/constants/group'
-import type { GROUP_ITEM } from '~app/constants/group'
+import { useStorage } from '@plasmohq/storage/hook';
+
+import { GROUP_KEY } from '~app/constants/group';
+import type { GROUP_ITEM } from '~app/constants/group';
+import { STORE_KEY } from '~app/utils/store';
 
 // eslint-disable-next-line no-unused-vars
 type Setter<T> = ((v?: T, isHydrated?: boolean) => T) | T;

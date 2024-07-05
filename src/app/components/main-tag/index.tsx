@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
-import React from "react"
+import { css } from '@emotion/react';
+import React from 'react';
 
-import style from "./index.module.scss"
+import style from './index.module.scss';
 
 interface IProps {
-  children?: React.ReactElement
+  children?: React.ReactElement;
 }
 /**
  * MainTag组件
@@ -18,12 +18,12 @@ export default function MainTag(props: IProps): React.ReactElement {
     button {
       outline: none;
     }
-  `
+  `;
   return (
     <div css={buttonStyle}>
       <button className={style.button} role="button">
         {props.children}
       </button>
     </div>
-  )
+  );
 }
