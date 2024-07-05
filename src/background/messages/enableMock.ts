@@ -5,6 +5,8 @@ import type { PlasmoMessaging } from '@plasmohq/messaging';
 import { GLOBAL_VARIABLE, GLOBAL_VARIABLE_MAP } from '~app/constants';
 import store, { STORE_KEY } from '~app/utils/store';
 
+import { onTabCallback } from '../tools';
+
 const injectMap = new Map();
 
 const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) => {
@@ -147,28 +149,32 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   if (enable && enableInTab) {
     // 当前tab即时启动
     const { windowId, id } = tab;
-    inject(windowId, id);
+    onTabCallback(id, () => {
+      inject(windowId, id);
+    });
   }
   if (!enable && enableInTab) {
     const { id } = tab;
-    try {
-      chrome.scripting.executeScript({
-        target: {
-          tabId: id,
-        },
-        world: 'MAIN', // MAIN in order to access the window object
-        func: async (varName) => {
-          try {
-            window[varName] = [];
-          } catch (error) {
-            console.log(error);
-          }
-        },
-        args: [GLOBAL_VARIABLE.CHROME_PLUS_PROXY_ROUTES],
-      });
-    } catch (error) {
-      console.log('enableMock:', error);
-    }
+    onTabCallback(id, () => {
+      try {
+        chrome.scripting.executeScript({
+          target: {
+            tabId: id,
+          },
+          world: 'MAIN', // MAIN in order to access the window object
+          func: async (varName) => {
+            try {
+              window[varName] = [];
+            } catch (error) {
+              console.log(error);
+            }
+          },
+          args: [GLOBAL_VARIABLE.CHROME_PLUS_PROXY_ROUTES],
+        });
+      } catch (error) {
+        console.log('enableMock:', error);
+      }
+    });
   }
   res.send({});
 };

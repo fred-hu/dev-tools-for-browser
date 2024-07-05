@@ -1,6 +1,6 @@
 import { debounce } from 'radash';
 import copy from 'url:~app/scripts/copy.ts';
-
+import { onTabCallback } from '../tools'
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
 import store, { STORE_KEY } from '~app/utils/store';
@@ -97,7 +97,9 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     if (tab) {
       const { windowId, id, url } = tab;
       if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-        inject(windowId, id);
+        onTabCallback(id, () => {
+          inject(windowId, id);
+        })
       }
     }
   }
