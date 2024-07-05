@@ -103,6 +103,7 @@ const App: React.FC = () => {
   };
   const showModal = () => {
     setOpen(true);
+    setIsAll(false);
     setTimeout(() => {
       // 新增时重置表单
       form.resetFields();
