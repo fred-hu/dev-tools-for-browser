@@ -22,7 +22,7 @@ This is a browser extension that integrates multiple developer tools, aimed at i
 - [x] MOCK
 - [x] One-Click Unlock for Web Page Copy Restrictions
 - [x] JSON to TS Types
-- [ ] QR Code
+- [x] QR Code
 - [ ] Color Conversion
 - [ ] ...
 
@@ -63,7 +63,10 @@ Method 2: [dev-tools.zip](https://github.com/fred-hu/dev-tools-for-browser/relea
   <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/mock.png" width="600"/>
 </p>
 <p align="center">
-  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/jsontots.png" width="600"/>
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/jsontotype.png" width="600"/>
+</p>
+<p align="center">
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/qrcode.png" width="600"/>
 </p>
 
 ## Contribution

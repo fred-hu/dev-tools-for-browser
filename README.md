@@ -22,7 +22,7 @@
 - [x] MOCK
 - [x] 一键破解网页复制限制
 - [x] JSON to ts types
-- [ ] 二维码
+- [x] 二维码
 - [ ] 颜色转换
 - [ ] ...
 
@@ -66,7 +66,10 @@
   <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/mock.png" width="600"/>
 </p>
 <p align="center">
-  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/jsontots.png" width="600"/>
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/jsontotype.png" width="600"/>
+</p>
+<p align="center">
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/qrcode.png" width="600"/>
 </p>
 
 ## 贡献
