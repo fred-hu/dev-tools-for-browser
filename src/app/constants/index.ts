@@ -8,6 +8,8 @@ export const MESSAGE_TYPES = {
   SET_LOADING: 'setLoading',
   SET_RECORD: 'setRecord',
   SET_QR_CODE: 'setQrCode',
+  SET_QR_CODE_READY: 'setQrCodeReady',
+  SET_JSON_TO_TYPES_READY: 'setQrCodeReady',
 };
 
 export enum OPERATE_TYPE {

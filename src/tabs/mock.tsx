@@ -392,7 +392,7 @@ const App: React.FC = () => {
           <div>
             <Text type="success">
               <CoffeeOutlined style={{ marginRight: 5 }} />
-              支持mock数据、重定向、修改请求头&响应头等
+              支持mock数据、重定向、修改响应头等
             </Text>
           </div>
           <Flex gap={20} align="center" justify="start">
