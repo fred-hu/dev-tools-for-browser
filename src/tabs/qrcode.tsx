@@ -27,8 +27,18 @@ const App: React.FC = () => {
     }
   };
   useEffect(() => {
+    chrome.runtime?.id && chrome.runtime.sendMessage({
+      action: MESSAGE_TYPES.SET_QR_CODE_READY,
+      payload: {
+        secret: 'qrcode-to-popup',
+        data: true,
+      },
+    }, function(response) {
+      setText(response?.data ?? '');
+    });
+
     const callback = (request, sender, sendResponse) => {
-      request?.url && setText(request.url);
+      request?.data && setText(request.data);
     };
     chrome.runtime.id && chrome.runtime.onMessage.addListener(callback);
     return () => {

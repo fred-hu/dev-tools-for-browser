@@ -226,13 +226,22 @@ function IndexPopup() {
                 }
                 if (existingPanel) break;
               }
+              const callback = function(request, sender, sendResponse) {
+                if (request.action === MESSAGE_TYPES.SET_QR_CODE_READY) {
+                  if (request.payload.secret === 'qrcode-to-popup' && request.payload.data) {
+                    sendResponse({ data: url });
+                  }
+                }
+              }
               if (existingPanel) {
                 // 如果已经存在具有相同 URL 的面板，则激活该窗口
                 await chrome.windows.update(existingPanel.id, { focused: true });
-                setTimeout(() => {
-                  chrome.tabs.sendMessage(existingPanel.tabs[0].id, { url });
-                }, 0);
+                chrome.tabs.sendMessage(existingPanel.tabs[0].id, { data: url });
               } else {
+                if (chrome.runtime?.id) {
+                  chrome.runtime.onMessage.removeListener(callback);
+                  chrome.runtime.onMessage.addListener(callback);
+                }
                 // 如果不存在，则创建一个新的面板
                 const tab = await chrome.windows.create({
                   url: panelUrl,
@@ -240,9 +249,6 @@ function IndexPopup() {
                   width: 400,
                   height: 400,
                 });
-                setTimeout(() => {
-                  chrome.tabs.sendMessage(tab.tabs[0].id, { url });
-                }, 500);
               }
             });
           },

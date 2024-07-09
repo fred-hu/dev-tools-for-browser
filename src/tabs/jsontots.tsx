@@ -1,7 +1,7 @@
 import { CopyOutlined, FileOutlined } from '@ant-design/icons';
 import { Button, Flex, Input, message, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-
+import { MESSAGE_TYPES } from '~app/constants';
 import JsonEditor from '~app/components/json-editor';
 import { copyText, jsonToTsTypes } from '~app/utils';
 
@@ -22,6 +22,28 @@ export default function UnnamedComponent(): React.ReactElement {
       return false;
     }
   };
+  useEffect(() => {
+    chrome.runtime?.id && chrome.runtime.sendMessage({
+      action: MESSAGE_TYPES.SET_JSON_TO_TYPES_READY,
+      payload: {
+        secret: 'jsontotype-to-popup',
+        data: true,
+      },
+    }, function(response) {
+      setData(response?.data ?? '');
+    });
+
+    const callback = (request, sender, sendResponse) => {
+      setTs('');
+      request?.data && setData(request.data);
+    };
+    chrome.runtime.id && chrome.runtime.onMessage.addListener(callback);
+    return () => {
+      setTs('');
+      setData('');
+      chrome.runtime.id && chrome.runtime.onMessage.removeListener(callback);
+    };
+  }, []);
   return (
     <div>
       <JsonEditor
