@@ -39,7 +39,6 @@ import './index.css';
 import { sendToBackground } from '@plasmohq/messaging';
 import { useStorage } from '@plasmohq/storage/hook';
 
-import AppCard from '~app/components/popup-app-card';
 import store, { globalSwitchConfig, STORE_KEY } from '~app/utils/store';
 import type { TYPE_GLOBAL_SWITCH_CONFIG } from '~app/utils/store';
 
