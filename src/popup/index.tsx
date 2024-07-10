@@ -10,6 +10,7 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 
+import Provider from '~app/components/provider';
 import { MESSAGE_TYPES } from '~app/constants';
 
 import '~app/styles/tailwind.scss';
@@ -226,13 +227,13 @@ function IndexPopup() {
                 }
                 if (existingPanel) break;
               }
-              const callback = function(request, sender, sendResponse) {
+              const callback = function (request, sender, sendResponse) {
                 if (request.action === MESSAGE_TYPES.SET_QR_CODE_READY) {
                   if (request.payload.secret === 'qrcode-to-popup' && request.payload.data) {
                     sendResponse({ data: url });
                   }
                 }
-              }
+              };
               if (existingPanel) {
                 // 如果已经存在具有相同 URL 的面板，则激活该窗口
                 await chrome.windows.update(existingPanel.id, { focused: true });
@@ -259,78 +260,80 @@ function IndexPopup() {
     getData();
   }, []);
   return (
-    <div
-      style={{
-        backgroundColor: '#f5f5f5',
-        width: 400,
-        height: 600,
-        overflow: 'auto',
-      }}>
-      <div className="cards" style={{ padding: 20 }}>
-        <Flex align="center" justify="right">
-          <Segmented
-            disabled
-            options={[
-              { value: 'list', icon: <OrderedListOutlined /> },
-              { value: 'cards', icon: <AppstoreOutlined /> },
-            ]}
+    <Provider>
+      <div
+        style={{
+          backgroundColor: '#f5f5f5',
+          width: 400,
+          height: 600,
+          overflow: 'auto',
+        }}>
+        <div className="cards" style={{ padding: 20 }}>
+          <Flex align="center" justify="right">
+            <Segmented
+              disabled
+              options={[
+                { value: 'list', icon: <OrderedListOutlined /> },
+                { value: 'cards', icon: <AppstoreOutlined /> },
+              ]}
+            />
+          </Flex>
+          <List
+            className=""
+            loading={loading}
+            itemLayout="horizontal"
+            loadMore={null}
+            dataSource={list || []}
+            renderItem={(item) => (
+              <List.Item style={{ padding: '5px 0' }}>
+                <Skeleton avatar title={false} loading={item.loading} active>
+                  <List.Item.Meta
+                    avatar={
+                      <Flex gap={5} justify="center" align="center" vertical>
+                        <Avatar src={item.icon} size="large" shape="square" />
+                      </Flex>
+                    }
+                    title={<span>{item.name}</span>}
+                    description={
+                      <Tooltip title={item.description} placement="topLeft">
+                        <span
+                          style={{
+                            fontSize: 12,
+                            display: 'inline-block',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            width: 190,
+                            boxSizing: 'border-box',
+                          }}>
+                          {item.description}
+                        </span>
+                      </Tooltip>
+                    }
+                  />
+                  <Flex justify="space-between" align="center" vertical={false} gap={10} style={{ paddingLeft: 10 }}>
+                    {item.onSettingClick && <Button icon={<SettingOutlined />} onClick={item.onSettingClick}></Button>}
+                    {item.onEnableChange && (
+                      <Switch
+                        checkedChildren="启用"
+                        unCheckedChildren="关闭"
+                        value={item.enable}
+                        onChange={item.onEnableChange}
+                      />
+                    )}
+                    {item.onOpen && (
+                      <Button size="small" type="link" onClick={item.onOpen}>
+                        打开
+                      </Button>
+                    )}
+                  </Flex>
+                </Skeleton>
+              </List.Item>
+            )}
           />
-        </Flex>
-        <List
-          className=""
-          loading={loading}
-          itemLayout="horizontal"
-          loadMore={null}
-          dataSource={list}
-          renderItem={(item) => (
-            <List.Item actions={[]} style={{ padding: '5px 0' }}>
-              <Skeleton avatar title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  avatar={
-                    <Flex gap={5} justify="center" align="center" vertical>
-                      <Avatar src={item.icon} size="large" shape="square" />
-                    </Flex>
-                  }
-                  title={<span>{item.name}</span>}
-                  description={
-                    <Tooltip title={item.description} placement="topLeft">
-                      <span
-                        style={{
-                          fontSize: 12,
-                          display: 'inline-block',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          width: 190,
-                          boxSizing: 'border-box',
-                        }}>
-                        {item.description}
-                      </span>
-                    </Tooltip>
-                  }
-                />
-                <Flex justify="space-between" align="center" vertical={false} gap={10} style={{ paddingLeft: 10 }}>
-                  {item.onSettingClick && <Button icon={<SettingOutlined />} onClick={item.onSettingClick}></Button>}
-                  {item.onEnableChange && (
-                    <Switch
-                      checkedChildren="启用"
-                      unCheckedChildren="关闭"
-                      value={item.enable}
-                      onChange={item.onEnableChange}
-                    />
-                  )}
-                  {item.onOpen && (
-                    <Button size="small" type="link" onClick={item.onOpen}>
-                      打开
-                    </Button>
-                  )}
-                </Flex>
-              </Skeleton>
-            </List.Item>
-          )}
-        />
+        </div>
       </div>
-    </div>
+    </Provider>
   );
 }
 

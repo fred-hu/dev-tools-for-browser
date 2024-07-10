@@ -1,3 +1,4 @@
+import { StyleProvider } from '@ant-design/cssinjs';
 import zhCN from 'antd/locale/zh_CN';
 
 import 'dayjs/locale/zh-cn';
@@ -16,5 +17,9 @@ interface IProps {
  */
 export default function Provider(props: IProps): React.ReactElement {
   const { children } = props;
-  return <ConfigProvider locale={zhCN}>{children}</ConfigProvider>;
+  return (
+    <ConfigProvider locale={zhCN}>
+      <StyleProvider hashPriority="high">{children}</StyleProvider>
+    </ConfigProvider>
+  );
 }

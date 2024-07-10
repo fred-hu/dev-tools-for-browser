@@ -30,6 +30,8 @@ import {
 } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 
+import Provider from '~app/components/provider';
+
 import '~app/styles/tailwind.scss';
 import './mock.css';
 
@@ -101,6 +103,15 @@ const App: React.FC = () => {
       description,
     });
   };
+  const formatDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要加1
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}${month}${day}-${hours}${minutes}`;
+  };
   const showModal = () => {
     setOpen(true);
     setIsAll(false);
@@ -132,12 +143,12 @@ const App: React.FC = () => {
       const { requestHeaders = [], responseHeader = [] } = values;
       requestHeaders.forEach((v) => {
         if (v.operationType === 'remove') {
-          delete v.value;
+          delete v?.value;
         }
       });
       responseHeader.forEach((v) => {
         if (v.operationType === 'remove') {
-          delete v.value;
+          delete v?.value;
         }
       });
       if (!values[PROXY_ROUTE_KEY.ID]) {
@@ -250,6 +261,9 @@ const App: React.FC = () => {
     }
   };
   const handleExport = async () => {
+    if (!proxyRoutes.length) {
+      return message.warning('暂无数据', 1);
+    }
     const data = encryptDecrypt(
       JSON.stringify({
         secret: 'MOCK',
@@ -262,7 +276,7 @@ const App: React.FC = () => {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', 'config.mock');
+    link.setAttribute('download', `config-${formatDate()}.mock`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -334,7 +348,7 @@ const App: React.FC = () => {
 
   const remove = (targetKey: TargetKey, empty = false) => {
     setFilter({ ...filter, group: '' });
-    setGroups((last) => last.filter((item) => item.value !== targetKey));
+    setGroups((last) => last.filter((item) => item?.value !== targetKey));
     // 清空组下所有数据
     if (empty) {
       setProxyRoutes(proxyRoutes.filter((item) => item[PROXY_ROUTE_KEY.GROUP] !== targetKey));
@@ -354,7 +368,7 @@ const App: React.FC = () => {
       add();
     } else {
       modal.confirm({
-        title: `确认删除当前分组-【${groups.find((v) => v.value === targetKey)?.label}】?`,
+        title: `确认删除当前分组-【${groups.find((v) => v?.value === targetKey)?.label}】?`,
         centered: true,
         icon: <ExclamationCircleOutlined />,
         content: (
@@ -383,254 +397,269 @@ const App: React.FC = () => {
     }
   };
   return (
-    <Layout style={{ height: '100%', overflow: 'auto', background: '#fff', minWidth: 1450 }}>
-      {notificationContextHolder}
-      {modalContextHolder}
-      <Header
-        style={{ display: 'flex', alignItems: 'center', position: 'sticky', top: 0, zIndex: 2, background: '#f5f5f5' }}>
-        <Flex align="center" justify="space-between" gap={20} style={{ width: '100%' }}>
-          <div>
-            <Text type="success">
-              <CoffeeOutlined style={{ marginRight: 5 }} />
-              支持mock数据、重定向、修改响应头等
-            </Text>
-          </div>
-          <Flex gap={20} align="center" justify="start">
-            {(globalSwitchConfig as any)?.mock === false && (
-              <Text type="warning">
-                <WarningOutlined style={{ marginRight: 5 }} />
-                全局已禁用MOCK功能
-              </Text>
-            )}
-            <Button type="primary" icon={<DownloadOutlined />} size={'middle'} onClick={handleExport}>
-              导出
-            </Button>
-            <Button
-              type="primary"
-              icon={<UploadOutlined />}
-              size={'middle'}
-              onClick={() => {
-                fileInputRef.current.click();
-              }}>
-              导入
-            </Button>
-            <Dropdown.Button
-              size="middle"
-              style={{ width: 140 }}
-              menu={{
-                items: [
-                  {
-                    key: '1',
-                    label: (
-                      <Button size="small" danger type="link" icon={<ClearOutlined />}>
-                        清空全部数据
-                      </Button>
-                    ),
-                  },
-                  {
-                    key: '2',
-                    label: (
-                      <Button
-                        className="text-black"
-                        size="small"
-                        type="link"
-                        icon={<CloseOutlined />}
-                        style={{ color: 'black' }}>
-                        全部禁用
-                      </Button>
-                    ),
-                  },
-                  {
-                    key: '3',
-                    label: (
-                      <Button
-                        className="text-black"
-                        size="small"
-                        type="link"
-                        icon={<CheckOutlined />}
-                        style={{ color: 'black' }}>
-                        全部启用
-                      </Button>
-                    ),
-                  },
-                ],
-                onClick: (e) => {
-                  switch (e.key) {
-                    case '1': {
-                      if (proxyRoutes.length) {
-                        modal.confirm({
-                          title: '确认清空',
-                          icon: <ExclamationCircleOutlined />,
-                          content: '此操作将清空包含分组在内的所有数据，是否继续？',
-                          okText: '确认',
-                          cancelText: '取消',
-                          onOk: () => {
-                            setProxyRoutes([]);
-                            setGroups([groups[0]]);
-                            setFilter({ ...filter, group: '' });
-                            message.success('清空成功', 1);
-                          },
-                        });
-                      } else {
-                        message.warning('暂无数据', 1);
-                      }
-                      break;
-                    }
-                    case '2': {
-                      if (proxyRoutes.length) {
-                        setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: false })));
-                        message.success('已全部禁用', 1);
-                      } else {
-                        message.warning('暂无数据', 1);
-                      }
-                      break;
-                    }
-                    case '3': {
-                      if (proxyRoutes.length) {
-                        setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: true })));
-                        message.success('已全部启用', 1);
-                      } else {
-                        message.warning('暂无数据', 1);
-                      }
-                      break;
-                    }
-                    default: {
-                      break;
-                    }
-                  }
-                },
-              }}>
-              <SwitcherOutlined />
-              批量操作
-            </Dropdown.Button>
-            <input
-              type="file"
-              id="upload"
-              name="upload"
-              onChange={handleUpload}
-              accept=".mock"
-              style={{ display: 'none' }}
-              ref={fileInputRef}
-            />
-          </Flex>
-        </Flex>
-      </Header>
-      <Content style={{ padding: '10px' }}>
-        <div
+    <Provider>
+      <Layout style={{ height: '100%', overflow: 'auto', background: '#fff', minWidth: 1450 }}>
+        {notificationContextHolder}
+        {modalContextHolder}
+        <Header
           style={{
-            background: colorBgContainer,
-            minHeight: 280,
-            padding: 24,
-            borderRadius: borderRadiusLG,
+            display: 'flex',
+            alignItems: 'center',
+            position: 'sticky',
+            top: 0,
+            zIndex: 2,
+            background: '#f5f5f5',
           }}>
-          <Flex justify="space-between" align="center">
-            <Space size={20}>
-              <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
-                新增Mock
+          <Flex align="center" justify="space-between" gap={20} style={{ width: '100%' }}>
+            <div>
+              <Text type="success">
+                <CoffeeOutlined style={{ marginRight: 5 }} />
+                支持mock数据、重定向、修改响应头等
+              </Text>
+            </div>
+            <Flex gap={20} align="center" justify="start">
+              {(globalSwitchConfig as any)?.mock === false && (
+                <Text type="warning">
+                  <WarningOutlined style={{ marginRight: 5 }} />
+                  全局已禁用MOCK功能
+                </Text>
+              )}
+              <Button type="primary" icon={<DownloadOutlined />} size={'middle'} onClick={handleExport}>
+                导出
               </Button>
               <Button
-                type="default"
-                disabled={filter?.group === ''}
-                icon={<EditOutlined />}
-                onClick={() =>
-                  setDrawerData({ ...drawerData, open: true, data: groups.find((v) => v.value === filter?.group) })
-                }>
-                编辑当前分组
-              </Button>
-            </Space>
-            <Space size={50}>
-              <Select
-                labelInValue
-                optionLabelProp="label"
-                style={{ width: 300 }}
-                allowClear
-                showSearch
-                optionFilterProp="children"
-                filterOption={(input, option) => {
-                  const arrOption = option?.value?.toString().split('$').slice(0, 2);
-                  return arrOption.some((v) => v.toLowerCase().includes(input.toLowerCase()));
-                }}
-                filterSort={(optionA, optionB) =>
-                  (optionA?.value?.toString() ?? '')
-                    .toLowerCase()
-                    .localeCompare((optionB?.value?.toString() ?? '').toLowerCase())
-                }
-                placeholder="全局搜索：MOCK名、URL地址"
-                onChange={(value) => {
-                  const url = value?.value?.split('$')?.[0];
-                  if (url) {
-                    const filter = url === '*' ? '' : url;
-                    const selectedItem = proxyRoutes.find((item) => item.url === filter);
-                    setFilter({ ...filter, group: selectedItem?.group || '' });
-                  }
+                type="primary"
+                icon={<UploadOutlined />}
+                size={'middle'}
+                onClick={() => {
+                  fileInputRef.current.click();
                 }}>
-                {proxyRoutes.map((item) => (
-                  <Select.Option
-                    key={item.id}
-                    value={`${item?.url || '*'}$${item.name}$${item.id}`}
-                    label={<span style={{ fontSize: 13, color: '#333' }}>{`URL地址: ${item.url || '*'}`}</span>}>
-                    <div style={{ padding: 5 }}>
-                      <Flex justify="start" align="center" style={{ fontSize: 13 }}>
-                        <strong>URL地址：{item.url || '*'}</strong>
-                      </Flex>
-                      <Flex justify="space-between" align="center" style={{ fontSize: 12, color: '#666' }}>
-                        <span style={{ width: '50%' }}>分组：{groupMap[item.group] || '默认分组'}</span>
-                        <span style={{ width: '50%' }}>MOCK名：{item.name}</span>
-                      </Flex>
-                    </div>
-                  </Select.Option>
-                ))}
-              </Select>
-            </Space>
+                导入
+              </Button>
+              <Dropdown.Button
+                size="middle"
+                style={{ width: 140 }}
+                menu={{
+                  items: [
+                    {
+                      key: '1',
+                      label: (
+                        <Button size="small" danger type="link" icon={<ClearOutlined />}>
+                          清空全部数据
+                        </Button>
+                      ),
+                    },
+                    {
+                      key: '2',
+                      label: (
+                        <Button
+                          className="text-black"
+                          size="small"
+                          type="link"
+                          icon={<CloseOutlined />}
+                          style={{ color: 'black' }}>
+                          全部禁用
+                        </Button>
+                      ),
+                    },
+                    {
+                      key: '3',
+                      label: (
+                        <Button
+                          className="text-black"
+                          size="small"
+                          type="link"
+                          icon={<CheckOutlined />}
+                          style={{ color: 'black' }}>
+                          全部启用
+                        </Button>
+                      ),
+                    },
+                  ],
+                  onClick: (e) => {
+                    switch (e.key) {
+                      case '1': {
+                        if (proxyRoutes.length) {
+                          modal.confirm({
+                            title: '确认清空',
+                            icon: <ExclamationCircleOutlined />,
+                            content: '此操作将清空包含分组在内的所有数据，是否继续？',
+                            okText: '确认',
+                            cancelText: '取消',
+                            onOk: () => {
+                              setProxyRoutes([]);
+                              setGroups([groups[0]]);
+                              setFilter({ ...filter, group: '' });
+                              message.success('清空成功', 1);
+                            },
+                          });
+                        } else {
+                          message.warning('暂无数据', 1);
+                        }
+                        break;
+                      }
+                      case '2': {
+                        if (proxyRoutes.length) {
+                          setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: false })));
+                          message.success('已全部禁用', 1);
+                        } else {
+                          message.warning('暂无数据', 1);
+                        }
+                        break;
+                      }
+                      case '3': {
+                        if (proxyRoutes.length) {
+                          setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: true })));
+                          message.success('已全部启用', 1);
+                        } else {
+                          message.warning('暂无数据', 1);
+                        }
+                        break;
+                      }
+                      default: {
+                        break;
+                      }
+                    }
+                  },
+                }}>
+                <SwitcherOutlined />
+                批量操作
+              </Dropdown.Button>
+              <input
+                type="file"
+                id="upload"
+                name="upload"
+                onChange={handleUpload}
+                accept=".mock"
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+              />
+            </Flex>
           </Flex>
-          <Divider />
-          <Tabs
-            type="editable-card"
-            onChange={onChange}
-            activeKey={filter?.group ?? ''}
-            onEdit={onEdit}
-            items={groups.map((v) => {
-              return {
-                label: v?.label,
-                children: (
-                  <div>
-                    <MockTable dataSource={proxyRoutes} callback={onCallBack} filter={{ ...filter, group: v?.value }} />
-                  </div>
-                ),
-                key: v?.value,
-                closable: v?.closable,
-              };
-            })}
-          />
-        </div>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>Created by Fred</Footer>
-      <Modal
-        open={open}
-        title={id ? '编辑' : '新增'}
-        onOk={handleOk}
-        maskClosable={false}
-        onCancel={handleCancel}
-        width={formWidth}
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            取消
-          </Button>,
-          <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
-            确认
-          </Button>,
-        ]}>
-        <EditForm form={form} isAll={isAll} setIsAll={setIsAll} />
-      </Modal>
-      <EditGroup
-        drawerData={drawerData}
-        setDrawerData={setDrawerData}
-        onSubmit={(v) => {
-          setFilter({ ...filter, group: v.value });
-          message.success(v.type === 'add' ? '新建成功' : '编辑成功', 1);
-        }}
-      />
-    </Layout>
+        </Header>
+        <Content style={{ padding: '10px', overflow: 'auto' }}>
+          <div
+            style={{
+              background: colorBgContainer,
+              minHeight: 280,
+              padding: 24,
+              borderRadius: borderRadiusLG,
+            }}>
+            <Flex justify="space-between" align="center">
+              <Space size={20}>
+                <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+                  新增Mock
+                </Button>
+                <Button
+                  type="default"
+                  disabled={filter?.group === ''}
+                  icon={<EditOutlined />}
+                  onClick={() =>
+                    setDrawerData({ ...drawerData, open: true, data: groups.find((v) => v?.value === filter?.group) })
+                  }>
+                  编辑当前分组
+                </Button>
+              </Space>
+              <Space size={50}>
+                <Select
+                  labelInValue
+                  optionLabelProp="label"
+                  style={{ width: 300 }}
+                  allowClear
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) => {
+                    const arrOption = option?.value?.toString().split('$').slice(0, 2);
+                    return arrOption.some((v) => v.toLowerCase().includes(input.toLowerCase()));
+                  }}
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.value?.toString() ?? '')
+                      .toLowerCase()
+                      .localeCompare((optionB?.value?.toString() ?? '').toLowerCase())
+                  }
+                  placeholder="全局搜索：MOCK名、URL地址"
+                  onChange={(value) => {
+                    const url = value?.value?.split('$')?.[0];
+                    if (url) {
+                      const filter = url === '*' ? '' : url;
+                      const selectedItem = proxyRoutes.find((item) => item.url === filter);
+                      setFilter({ ...filter, group: selectedItem?.group || '' });
+                    }
+                  }}>
+                  {proxyRoutes.map((item) => (
+                    <Select.Option
+                      key={item.id}
+                      value={`${item?.url || '*'}$${item.name}$${item.id}`}
+                      label={<span style={{ fontSize: 13, color: '#333' }}>{`URL地址: ${item.url || '*'}`}</span>}>
+                      <div style={{ padding: 5 }}>
+                        <Flex justify="start" align="center" style={{ fontSize: 13 }}>
+                          <strong>URL地址：{item.url || '*'}</strong>
+                        </Flex>
+                        <Flex justify="space-between" align="center" style={{ fontSize: 12, color: '#666' }}>
+                          <span style={{ width: '50%' }}>分组：{groupMap[item.group] || '默认分组'}</span>
+                          <span style={{ width: '50%' }}>MOCK名：{item.name}</span>
+                        </Flex>
+                      </div>
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Space>
+            </Flex>
+            <Divider />
+            <Tabs
+              type="editable-card"
+              onChange={onChange}
+              activeKey={filter?.group ?? ''}
+              onEdit={onEdit}
+              items={groups.map((v) => {
+                return {
+                  label: v?.label,
+                  children: (
+                    <div>
+                      <MockTable
+                        dataSource={proxyRoutes}
+                        callback={onCallBack}
+                        filter={{ ...filter, group: v?.value }}
+                      />
+                    </div>
+                  ),
+                  key: v?.value,
+                  closable: v?.closable,
+                };
+              })}
+            />
+          </div>
+        </Content>
+        <Footer style={{ textAlign: 'center', padding: '0px', height: '30px', lineHeight: '30px' }}>
+          Author: Fred
+        </Footer>
+        <Modal
+          open={open}
+          title={id ? '编辑' : '新增'}
+          onOk={handleOk}
+          maskClosable={false}
+          onCancel={handleCancel}
+          width={formWidth}
+          footer={[
+            <Button key="back" onClick={handleCancel}>
+              取消
+            </Button>,
+            <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
+              确认
+            </Button>,
+          ]}>
+          <EditForm form={form} isAll={isAll} setIsAll={setIsAll} />
+        </Modal>
+        <EditGroup
+          drawerData={drawerData}
+          setDrawerData={setDrawerData}
+          onSubmit={(v) => {
+            setFilter({ ...filter, group: v?.value });
+            message.success(v.type === 'add' ? '新建成功' : '编辑成功', 1);
+          }}
+        />
+      </Layout>
+    </Provider>
   );
 };
 
