@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
+import Provider from '~app/components/provider';
 import { MESSAGE_TYPES, PROXY_ROUTE_KEY } from '~app/constants';
 
 const { Text, Link } = Typography;
@@ -72,22 +73,24 @@ const MockRecord = () => {
     };
   }, []);
   return (
-    <div style={{ padding: '20px' }}>
-      <Space size={40}>
-        <Button type="primary" danger onClick={() => setRecords([])} icon={<ClearOutlined />}>
-          清空记录
-        </Button>
-        <Text type="danger">Note: 仅保留10条记录</Text>
-      </Space>
-      <Table
-        style={{ marginTop: '10px' }}
-        rowKey={(record) => record.time}
-        dataSource={records}
-        columns={columns}
-        pagination={false}
-        size="small"
-      />
-    </div>
+    <Provider>
+      <div style={{ padding: '20px' }}>
+        <Space size={40}>
+          <Button type="primary" danger onClick={() => setRecords([])} icon={<ClearOutlined />}>
+            清空记录
+          </Button>
+          <Text type="danger">Note: 仅保留10条记录</Text>
+        </Space>
+        <Table
+          style={{ marginTop: '10px' }}
+          rowKey={(record) => record.time}
+          dataSource={records}
+          columns={columns}
+          pagination={false}
+          size="small"
+        />
+      </div>
+    </Provider>
   );
 };
 

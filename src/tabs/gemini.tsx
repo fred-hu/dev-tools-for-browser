@@ -1,6 +1,8 @@
 import { Button, Flex, Input, Select, Spin } from 'antd';
 import React, { useRef, useState } from 'react';
 
+import Provider from '~app/components/provider';
+
 export default function Gemini() {
   const model = useRef<any>();
   const [question, setQuestion] = useState('');
@@ -21,24 +23,26 @@ export default function Gemini() {
     });
   };
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 16,
-      }}>
-      <h2>Gemini</h2>
-      <Input.TextArea placeholder="请输入问题" onChange={(e) => setQuestion(e.target.value)} />
-      <Flex justify="right" style={{ padding: '10px 5px' }}>
-        <Button onClick={onAsk}>提问</Button>
-      </Flex>
-      <div>
-        <Spin tip="Loading" size="small" spinning={loading}>
-          <pre>
-            <code>{answer}</code>
-          </pre>
-        </Spin>
+    <Provider>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 16,
+        }}>
+        <h2>Gemini</h2>
+        <Input.TextArea placeholder="请输入问题" onChange={(e) => setQuestion(e.target.value)} />
+        <Flex justify="right" style={{ padding: '10px 5px' }}>
+          <Button onClick={onAsk}>提问</Button>
+        </Flex>
+        <div>
+          <Spin tip="Loading" size="small" spinning={loading}>
+            <pre>
+              <code>{answer}</code>
+            </pre>
+          </Spin>
+        </div>
       </div>
-    </div>
+    </Provider>
   );
 }

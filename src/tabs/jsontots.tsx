@@ -1,8 +1,10 @@
 import { CopyOutlined, FileOutlined } from '@ant-design/icons';
 import { Button, Flex, Input, message, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { MESSAGE_TYPES } from '~app/constants';
+
 import JsonEditor from '~app/components/json-editor';
+import Provider from '~app/components/provider';
+import { MESSAGE_TYPES } from '~app/constants';
 import { copyText, jsonToTsTypes } from '~app/utils';
 
 const { TextArea } = Input;
@@ -23,15 +25,19 @@ export default function UnnamedComponent(): React.ReactElement {
     }
   };
   useEffect(() => {
-    chrome.runtime?.id && chrome.runtime.sendMessage({
-      action: MESSAGE_TYPES.SET_JSON_TO_TYPES_READY,
-      payload: {
-        secret: 'jsontotype-to-popup',
-        data: true,
-      },
-    }, function(response) {
-      setData(response?.data ?? '');
-    });
+    chrome.runtime?.id &&
+      chrome.runtime.sendMessage(
+        {
+          action: MESSAGE_TYPES.SET_JSON_TO_TYPES_READY,
+          payload: {
+            secret: 'jsontotype-to-popup',
+            data: true,
+          },
+        },
+        function (response) {
+          setData(response?.data ?? '');
+        }
+      );
 
     const callback = (request, sender, sendResponse) => {
       setTs('');
@@ -45,45 +51,47 @@ export default function UnnamedComponent(): React.ReactElement {
     };
   }, []);
   return (
-    <div>
-      <JsonEditor
-        id="jstojson"
-        value={data}
-        onChange={(v) => {
-          setData(v);
-          setTs('');
-        }}
-      />
-      <Flex style={{ marginTop: 10 }} justify="space-between">
-        <Button
-          type="primary"
-          icon={<FileOutlined />}
-          onClick={() => {
+    <Provider>
+      <div>
+        <JsonEditor
+          id="jstojson"
+          value={data}
+          onChange={(v) => {
+            setData(v);
             setTs('');
-            const res = valid(data);
-            if (res) {
-              const result = jsonToTsTypes(res, 'RootType');
-              setTs(result);
-              message.success('转换成功', 1);
-            }
-          }}>
-          转换
-        </Button>
-        <Button
-          type="default"
-          disabled={!ts}
-          icon={<CopyOutlined />}
-          onClick={async () => {
-            await copyText(ts);
-            message.success('已复制', 1);
-          }}>
-          复制结果
-        </Button>
-      </Flex>
-      <pre style={{ border: '1px solid #f5f5f5', padding: 10, minHeight: 100 }}>
-        <code>{ts}</code>
-      </pre>
-      {/* <TextArea rows={10} value={ts} readOnly /> */}
-    </div>
+          }}
+        />
+        <Flex style={{ marginTop: 10 }} justify="space-between">
+          <Button
+            type="primary"
+            icon={<FileOutlined />}
+            onClick={() => {
+              setTs('');
+              const res = valid(data);
+              if (res) {
+                const result = jsonToTsTypes(res, 'RootType');
+                setTs(result);
+                message.success('转换成功', 1);
+              }
+            }}>
+            转换
+          </Button>
+          <Button
+            type="default"
+            disabled={!ts}
+            icon={<CopyOutlined />}
+            onClick={async () => {
+              await copyText(ts);
+              message.success('已复制', 1);
+            }}>
+            复制结果
+          </Button>
+        </Flex>
+        <pre style={{ border: '1px solid #f5f5f5', padding: 10, minHeight: 100 }}>
+          <code>{ts}</code>
+        </pre>
+        {/* <TextArea rows={10} value={ts} readOnly /> */}
+      </div>
+    </Provider>
   );
 }
