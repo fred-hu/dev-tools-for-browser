@@ -155,6 +155,12 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
       },
     },
     {
+      title: '返回状态',
+      dataIndex: PROXY_ROUTE_KEY.RESPONSE_STATUS,
+      key: PROXY_ROUTE_KEY.DELAY,
+      render: (text: string) => <span>{text}</span>,
+    },
+    {
       title: '延迟时间',
       dataIndex: PROXY_ROUTE_KEY.DELAY,
       key: PROXY_ROUTE_KEY.DELAY,

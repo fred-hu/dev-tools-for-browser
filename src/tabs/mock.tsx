@@ -383,7 +383,7 @@ const App: React.FC = () => {
     }
   };
   return (
-    <Layout style={{ height: '100%', overflow: 'auto', background: '#fff', minWidth: 1350 }}>
+    <Layout style={{ height: '100%', overflow: 'auto', background: '#fff', minWidth: 1450 }}>
       {notificationContextHolder}
       {modalContextHolder}
       <Header
@@ -457,29 +457,41 @@ const App: React.FC = () => {
                 onClick: (e) => {
                   switch (e.key) {
                     case '1': {
-                      modal.confirm({
-                        title: '确认清空',
-                        icon: <ExclamationCircleOutlined />,
-                        content: '此操作将清空包含分组在内的所有数据，是否继续？',
-                        okText: '确认',
-                        cancelText: '取消',
-                        onOk: () => {
-                          setProxyRoutes([]);
-                          setGroups([groups[0]]);
-                          setFilter({ ...filter, group: '' });
-                          message.success('清空成功', 1);
-                        },
-                      });
+                      if (proxyRoutes.length) {
+                        modal.confirm({
+                          title: '确认清空',
+                          icon: <ExclamationCircleOutlined />,
+                          content: '此操作将清空包含分组在内的所有数据，是否继续？',
+                          okText: '确认',
+                          cancelText: '取消',
+                          onOk: () => {
+                            setProxyRoutes([]);
+                            setGroups([groups[0]]);
+                            setFilter({ ...filter, group: '' });
+                            message.success('清空成功', 1);
+                          },
+                        });
+                      } else {
+                        message.warning('暂无数据', 1);
+                      }
                       break;
                     }
                     case '2': {
-                      setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: false })));
-                      message.success('已全部禁用', 1);
+                      if (proxyRoutes.length) {
+                        setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: false })));
+                        message.success('已全部禁用', 1);
+                      } else {
+                        message.warning('暂无数据', 1);
+                      }
                       break;
                     }
                     case '3': {
-                      setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: true })));
-                      message.success('已全部启用', 1);
+                      if (proxyRoutes.length) {
+                        setProxyRoutes(proxyRoutes.map((item) => ({ ...item, [PROXY_ROUTE_KEY.ENABLE]: true })));
+                        message.success('已全部启用', 1);
+                      } else {
+                        message.warning('暂无数据', 1);
+                      }
                       break;
                     }
                     default: {
