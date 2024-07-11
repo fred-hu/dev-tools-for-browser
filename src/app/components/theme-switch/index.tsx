@@ -1,7 +1,10 @@
 import styled from '@emotion/styled';
-import React, { useEffect, useState } from 'react';
-
-import s from './index.module.scss';
+import { ThemeProvider, useTheme, useThemeMode } from 'antd-style';
+import React, { useEffect, useState, useContext } from 'react';
+import { useStorage } from '@plasmohq/storage/hook';
+import store, { globalConfig, STORE_KEY } from '~app/utils/store';
+import type { TYPE_GLOBAL_SWITCH_CONFIG } from '~app/utils/store';
+import AppContext from '~app/context';
 
 interface IProps {
   prop1?: any;
@@ -15,10 +18,8 @@ interface IProps {
  * @returns React.ReactElement
  */
 export default function ThemeSwitcher(props: IProps): React.ReactElement {
-  const { prop1, prop2 = () => {} } = props;
-  const [data, setData] = useState();
-
-  useEffect(() => {}, []);
+  const config = useContext(AppContext);
+  const setGlobal = useStorage(STORE_KEY.GLOBAL_CONFIG)[1];
   const Div = styled.div`
     .ui-switch {
       /* switch */
@@ -114,8 +115,19 @@ export default function ThemeSwitcher(props: IProps): React.ReactElement {
   `;
   return (
     <Div>
-      <label className="ui-switch">
-        <input type="checkbox" />
+      <label className="ui-switch" htmlFor="theme-switch">
+        <input
+          id="theme-switch"
+          name="theme-switch"
+          type="checkbox"
+          checked={config[globalConfig.THEME] === 'dark'}
+          onChange={(e) => {
+            setGlobal((last) => ({
+              ...last,
+              [globalConfig.THEME]: e.target.checked ? 'dark' : 'light'
+            }));
+          }}
+        />
         <div className="slider">
           <div className="circle"></div>
         </div>
