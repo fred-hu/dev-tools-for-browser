@@ -39,6 +39,8 @@ import './index.css';
 import { sendToBackground } from '@plasmohq/messaging';
 import { useStorage } from '@plasmohq/storage/hook';
 
+import Search from '~app/components/focus-input';
+import ThemeSwitcher from '~app/components/theme-switch';
 import store, { globalSwitchConfig, STORE_KEY } from '~app/utils/store';
 import type { TYPE_GLOBAL_SWITCH_CONFIG } from '~app/utils/store';
 
@@ -60,6 +62,7 @@ type AppConfigItem = {
 };
 
 function IndexPopup() {
+  const apps = useRef([]);
   const [list, setList] = useState<AppConfigItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [drawerData, setDrawerData] = useState<{
@@ -87,7 +90,7 @@ function IndexPopup() {
         [globalSwitchConfig.MOCK]: false,
         [globalSwitchConfig.COPY]: false,
       };
-      setList([
+      apps.current = [
         {
           app: globalSwitchConfig.MOCK,
           name: 'MOCK工具',
@@ -253,7 +256,8 @@ function IndexPopup() {
             });
           },
         },
-      ]);
+      ];
+      setList([...apps.current]);
       setLoading(false);
     };
     getData();
@@ -262,19 +266,28 @@ function IndexPopup() {
     <Provider>
       <div
         style={{
-          backgroundColor: '#f5f5f5',
           width: 400,
           height: 600,
           overflow: 'auto',
         }}>
         <div className="cards" style={{ padding: 20 }}>
           <Flex align="center" justify="right">
-            <Segmented
-              disabled
-              options={[
-                { value: 'list', icon: <OrderedListOutlined /> },
-                { value: 'cards', icon: <AppstoreOutlined /> },
-              ]}
+            <ThemeSwitcher />
+          </Flex>
+          <Flex align="center" justify="center" style={{ margin: '20px 0px' }}>
+            <Search
+              style={{ width: '100%' }}
+              placeholder="搜索工具"
+              onChange={(val) => {
+                if (val.trim()) {
+                  const filter = apps.current.filter((v) => {
+                    return v.app?.includes(val) || v.name?.includes(val) || v.description?.includes(val);
+                  });
+                  setList([...filter]);
+                } else {
+                  setList([...apps.current]);
+                }
+              }}
             />
           </Flex>
           <List

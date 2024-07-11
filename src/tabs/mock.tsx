@@ -38,7 +38,6 @@ import './mock.css';
 import { sendToBackground } from '@plasmohq/messaging';
 import { useStorage } from '@plasmohq/storage/hook';
 
-import DownloadBtn from '~app/components/download-btn';
 import FocusInput from '~app/components/focus-input';
 import { MOCK_TYPE, OPERATE_TYPE, PROXY_ROUTE_KEY } from '~app/constants';
 import { GROUP_KEY } from '~app/constants/group';
