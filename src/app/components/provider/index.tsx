@@ -1,5 +1,4 @@
 import { StyleProvider } from '@ant-design/cssinjs';
-import { ThemeProvider } from 'antd-style';
 import zhCN from 'antd/locale/zh_CN';
 
 import AppContext from '~app/context';
@@ -7,7 +6,7 @@ import store, { globalConfig, STORE_KEY } from '~app/utils/store';
 
 import 'dayjs/locale/zh-cn';
 
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, theme } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 interface IProps {
@@ -52,15 +51,12 @@ export default function Provider(props: IProps): React.ReactElement {
     });
   }, []);
   return global ? (
-    <ConfigProvider locale={zhCN}>
-      <ThemeProvider themeMode={global[globalConfig.THEME]}>
-        <StyleProvider hashPriority="high">
-          <AppContext.Provider
-            value={global}>
-            {children}
-          </AppContext.Provider>
-        </StyleProvider>
-      </ThemeProvider>
+    <ConfigProvider
+      locale={zhCN}
+      theme={{ algorithm: global?.[globalConfig.THEME] === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm }}>
+      <StyleProvider hashPriority="high">
+        <AppContext.Provider value={global}>{children}</AppContext.Provider>
+      </StyleProvider>
     </ConfigProvider>
   ) : null;
 }

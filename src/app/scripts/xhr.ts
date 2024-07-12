@@ -157,7 +157,7 @@ import { jointUrl } from '~app/utils';
 
   window.fetch = async (...args) => {
     const [url, config = {}] = args;
-    const { method, body } = config;
+    const { method, body } = config ?? {};
     if (url && method) {
       enableMockCheck(window[GLOBAL_VARIABLE.CHROME_PLUS_PROXY_ROUTES] ?? [], this, method, jointUrl(url));
     }

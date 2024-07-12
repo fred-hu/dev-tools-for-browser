@@ -6,8 +6,7 @@ import AppContext from '~app/context';
 
 import '~app/styles/tailwind.scss';
 
-import { Avatar, Button, Flex, List, message, Skeleton, Switch, Tooltip } from 'antd';
-import { ThemeProvider, useTheme, useThemeMode } from 'antd-style';
+import { Avatar, Button, Flex, List, message, Skeleton, Switch, Tooltip, Layout } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import './index.css';
@@ -39,7 +38,6 @@ type AppConfigItem = {
 
 function IndexPopup() {
   const apps = useRef([]);
-  const theme = useTheme();
   const [list, setList] = useState<AppConfigItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [drawerData, setDrawerData] = useState<{
@@ -242,9 +240,8 @@ function IndexPopup() {
     getData();
   }, []);
   return (
-    <div
+    <Layout
       style={{
-        backgroundColor: theme.colorBgLayout,
         width: 400,
         height: 600,
         overflow: 'auto',
@@ -323,7 +320,7 @@ function IndexPopup() {
           )}
         />
       </div>
-    </div>
+    </Layout>
   );
 }
 

@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { ThemeProvider, useTheme, useThemeMode } from 'antd-style';
 import React, { useEffect, useState, useContext } from 'react';
 import { useStorage } from '@plasmohq/storage/hook';
 import store, { globalConfig, STORE_KEY } from '~app/utils/store';

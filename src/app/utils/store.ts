@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import type { ThemeAppearance } from 'antd-style';
 
 import { Storage } from '@plasmohq/storage';
 
@@ -29,7 +28,7 @@ export type TYPE_GLOBAL_SWITCH_CONFIG = {
 };
 
 export type TYPE_GLOBAL_CONFIG = {
-  [globalConfig.THEME]?: ThemeAppearance;
+  [globalConfig.THEME]?: 'dark' | 'light' | '';
 };
 
 const store = new Storage({
