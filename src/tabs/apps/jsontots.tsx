@@ -1,11 +1,14 @@
 import { CopyOutlined, FileOutlined } from '@ant-design/icons';
-import { Button, Flex, Input, message, Space } from 'antd';
+import { Button, Flex, Input, Layout, message, Space, theme } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import JsonEditor from '~app/components/json-editor';
 import { MESSAGE_TYPES } from '~app/constants';
 import { copyText, jsonToTsTypes } from '~app/utils';
 
+import '../styles/common.scss';
+
+const { useToken } = theme;
 const { TextArea } = Input;
 /**
  * 组件
@@ -14,7 +17,7 @@ const { TextArea } = Input;
 export default function UnnamedComponent(): React.ReactElement {
   const [data, setData] = useState('');
   const [ts, setTs] = useState('');
-
+  const { token } = useToken();
   const valid = (data) => {
     try {
       const result = JSON.parse(data);
@@ -50,7 +53,7 @@ export default function UnnamedComponent(): React.ReactElement {
     };
   }, []);
   return (
-    <div>
+    <Layout style={{ width: '100%', height: '100%', overflow: 'hidden', padding: 10 }}>
       <JsonEditor
         id="jstojson"
         value={data}
@@ -85,10 +88,10 @@ export default function UnnamedComponent(): React.ReactElement {
           复制结果
         </Button>
       </Flex>
-      <pre style={{ border: '1px solid #f5f5f5', padding: 10, minHeight: 100 }}>
+      <pre style={{ border: '1px solid #f5f5f5', padding: 10, minHeight: 100, color: token.colorText }}>
         <code>{ts}</code>
       </pre>
       {/* <TextArea rows={10} value={ts} readOnly /> */}
-    </div>
+    </Layout>
   );
 }

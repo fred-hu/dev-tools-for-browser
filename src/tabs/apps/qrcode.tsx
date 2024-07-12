@@ -1,7 +1,9 @@
-import { Button, Input, QRCode, Space, theme } from 'antd';
+import { Button, Input, Layout, QRCode, Space, theme } from 'antd';
 import React, { useEffect } from 'react';
 
 import { MESSAGE_TYPES } from '~app/constants';
+
+import '../styles/common.scss';
 
 const { useToken } = theme;
 
@@ -48,23 +50,25 @@ const App: React.FC = () => {
     };
   }, []);
   return (
-    <Space direction="vertical" align="center" style={{ width: '100%' }} id="qrcode">
-      <Input.TextArea
-        placeholder="请输入二维码内容"
-        rows={5}
-        style={{ width: '350px' }}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      {text && (
-        <>
-          <QRCode value={text || '-'} color={token.colorInfoText} bgColor={token.colorBgLayout} />
-        </>
-      )}
-      <Button type="primary" disabled={!text} onClick={downloadCanvasQRCode}>
-        Download
-      </Button>
-    </Space>
+    <Layout style={{ width: '100%', height: '100%', overflow: 'hidden', padding: 10 }}>
+      <Space direction="vertical" align="center" style={{ width: '100%' }} id="qrcode">
+        <Input.TextArea
+          placeholder="请输入二维码内容"
+          rows={5}
+          style={{ width: '350px' }}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        {text && (
+          <>
+            <QRCode value={text || '-'} color={token.colorInfoText} bgColor={token.colorBgLayout} />
+          </>
+        )}
+        <Button type="primary" disabled={!text} onClick={downloadCanvasQRCode}>
+          Download
+        </Button>
+      </Space>
+    </Layout>
   );
 };
 
