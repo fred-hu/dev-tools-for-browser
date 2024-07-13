@@ -7,7 +7,7 @@ import store, { globalConfig, STORE_KEY } from '~app/utils/store';
 import 'dayjs/locale/zh-cn';
 
 import { ConfigProvider, theme } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 interface IProps {
   children?: React.ReactElement;
@@ -50,6 +50,17 @@ export default function Provider(props: IProps): React.ReactElement {
       },
     });
   }, []);
+
+  const globalTheme = useMemo(() => {
+    return global?.[globalConfig.THEME];
+  }, [global?.[globalConfig.THEME]]);
+
+  useEffect(() => {
+    if (globalTheme) {
+      document.documentElement.setAttribute('data-theme', globalTheme);
+    }
+  }, [globalTheme]);
+
   return global ? (
     <ConfigProvider
       locale={zhCN}

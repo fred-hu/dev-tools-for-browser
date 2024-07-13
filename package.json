@@ -1,8 +1,8 @@
 {
   "name": "Dev-Tools",
   "displayName": "Dev Tools",
-  "version": "0.0.7",
-  "description": "a tool",
+  "version": "0.0.8",
+  "description": "一个集成了多种开发者工具、MOCK、重定向、破解网页复制限制等的浏览器插件。",
   "author": "fred",
   "scripts": {
     "dev": "plasmo dev --env=.env.dev",
