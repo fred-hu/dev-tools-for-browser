@@ -29,20 +29,8 @@ export default function Provider(props: IProps): React.ReactElement {
         ...data,
       }))
     );
-    store.get(STORE_KEY.GLOBAL_SWITCH_CONFIG).then((data: any) =>
-      setGlobal((last) => ({
-        ...last,
-        ...data,
-      }))
-    );
     store.watch({
       [STORE_KEY.GLOBAL_CONFIG]: (c) => {
-        setGlobal((last) => ({
-          ...last,
-          ...c.newValue,
-        }));
-      },
-      [STORE_KEY.GLOBAL_SWITCH_CONFIG]: (c) => {
         setGlobal((last) => ({
           ...last,
           ...c.newValue,

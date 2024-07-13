@@ -85,7 +85,7 @@ const App: React.FC = () => {
   );
   const [globalSwitchConfig] = useStorage(
     {
-      key: STORE_KEY.GLOBAL_SWITCH_CONFIG,
+      key: STORE_KEY.GLOBAL_CONFIG,
       instance: store,
     },
     {}

@@ -48,7 +48,7 @@ function IndexPopup() {
     app: {},
   });
   const config = useContext(AppContext);
-  const setGlobalSwitch = useStorage(STORE_KEY.GLOBAL_SWITCH_CONFIG)[1];
+  const setGlobalSwitch = useStorage(STORE_KEY.GLOBAL_CONFIG)[1];
   const onClose = () => {
     setDrawerData((last) => ({
       ...last,

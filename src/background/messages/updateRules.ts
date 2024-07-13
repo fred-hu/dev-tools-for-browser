@@ -24,7 +24,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   ];
 
   const routes: PROXY_ROUTE_ITEM[] = (await store.getItem(STORE_KEY.ROUTES)) ?? [];
-  const config: Record<string, boolean> = (await store.getItem(STORE_KEY.GLOBAL_SWITCH_CONFIG)) || {};
+  const config: Record<string, boolean> = (await store.getItem(STORE_KEY.GLOBAL_CONFIG)) || {};
   const { mock } = config;
   const ruleRoutes =
     routes
