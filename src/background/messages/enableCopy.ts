@@ -8,7 +8,7 @@ import store, { STORE_KEY } from '~app/utils/store';
 const injectMap = new Map();
 
 const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) => {
-  const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_SWITCH_CONFIG);
+  const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_CONFIG);
   const copyEnabled = config?.copy ?? false;
   if (copyEnabled) {
     const tag = `copy-${windowId}-${tabId}`;

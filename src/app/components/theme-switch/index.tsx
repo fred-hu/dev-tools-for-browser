@@ -1,253 +1,136 @@
-/* eslint-disable max-len */
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
-import React from 'react';
+import styled from '@emotion/styled';
+import React, { useEffect, useState, useContext } from 'react';
+import { useStorage } from '@plasmohq/storage/hook';
+import store, { globalConfig, STORE_KEY } from '~app/utils/store';
+import type { TYPE_GLOBAL_SWITCH_CONFIG } from '~app/utils/store';
+import AppContext from '~app/context';
 
 interface IProps {
-  value?: string;
-  checked?: boolean;
-  // eslint-disable-next-line no-unused-vars
-  onChange: (value?: boolean) => void;
+  prop1?: any;
+  prop2?: (data?: any) => void;
 }
+
 /**
- * slider-switch组件
- * @param {checked} boolean - 是否选中
+ * 主题切换组件
+ * @param {any} prop1 - xx属性
+ * @param {function} prop2 - xx方法
  * @returns React.ReactElement
  */
-export default function SliderSwitch(props: IProps): React.ReactElement {
-  const { value = 'dark', onChange, checked } = props;
-  const innerStyle = css`
-    display: flex;
-    align-items: center;
-    -webkit-tap-highlight-color: transparent;
-
-    .theme__fill,
-    .theme__icon {
-      transition: 0.3s;
+export default function ThemeSwitcher(props: IProps): React.ReactElement {
+  const config = useContext(AppContext);
+  const setGlobal = useStorage(STORE_KEY.GLOBAL_CONFIG)[1];
+  const Div = styled.div`
+    .ui-switch {
+      /* switch */
+      --switch-bg: rgb(135, 150, 165);
+      --switch-width: 48px;
+      --switch-height: 20px;
+      /* circle */
+      --circle-diameter: 32px;
+      --circle-bg: rgb(0, 56, 146);
+      --circle-inset: calc((var(--circle-diameter) - var(--switch-height)) / 2);
     }
 
-    .theme__fill {
-      background-color: var(--bg);
-      display: block;
-      mix-blend-mode: difference;
-      position: fixed;
-      inset: 0;
-      height: 100%;
-      transform: translateX(-100%);
+    .ui-switch input {
+      display: none;
     }
 
-    .theme__icon,
-    .theme__toggle {
-      z-index: 1;
-    }
-
-    .theme__icon,
-    .theme__icon-part {
-      position: absolute;
-    }
-
-    .theme__icon {
-      display: block;
-      top: 0.5em;
-      left: 0.5em;
-      width: 1.5em;
-      height: 1.5em;
-    }
-
-    .theme__icon-part {
-      border-radius: 50%;
-      box-shadow: 0.4em -0.4em 0 0.5em hsl(0, 0%, 100%) inset;
-      top: calc(50% - 0.5em);
-      left: calc(50% - 0.5em);
-      width: 1em;
-      height: 1em;
-      transition:
-        box-shadow var(--transDur) ease-in-out,
-        opacity var(--transDur) ease-in-out,
-        transform var(--transDur) ease-in-out;
-      transform: scale(0.5);
-    }
-
-    .theme__icon-part ~ .theme__icon-part {
-      background-color: hsl(0, 0%, 100%);
-      border-radius: 0.05em;
-      top: 50%;
-      left: calc(50% - 0.05em);
-      transform: rotate(0deg) translateY(0.5em);
-      transform-origin: 50% 0;
-      width: 0.1em;
-      height: 0.2em;
-    }
-
-    .theme__icon-part:nth-child(3) {
-      transform: rotate(45deg) translateY(0.45em);
-    }
-
-    .theme__icon-part:nth-child(4) {
-      transform: rotate(90deg) translateY(0.45em);
-    }
-
-    .theme__icon-part:nth-child(5) {
-      transform: rotate(135deg) translateY(0.45em);
-    }
-
-    .theme__icon-part:nth-child(6) {
-      transform: rotate(180deg) translateY(0.45em);
-    }
-
-    .theme__icon-part:nth-child(7) {
-      transform: rotate(225deg) translateY(0.45em);
-    }
-
-    .theme__icon-part:nth-child(8) {
-      transform: rotate(270deg) translateY(0.5em);
-    }
-
-    .theme__icon-part:nth-child(9) {
-      transform: rotate(315deg) translateY(0.5em);
-    }
-
-    .theme__label,
-    .theme__toggle,
-    .theme__toggle-wrap {
-      position: relative;
-    }
-
-    .theme__toggle,
-    .theme__toggle:before {
-      display: block;
-    }
-
-    .theme__toggle {
-      background-color: hsl(48, 90%, 85%);
-      border-radius: 25% / 50%;
-      box-shadow: 0 0 0 0.125em var(--primaryT);
-      padding: 0.25em;
-      width: 6em;
-      height: 3em;
+    .slider {
       -webkit-appearance: none;
+      -moz-appearance: none;
       appearance: none;
+      width: var(--switch-width);
+      height: var(--switch-height);
+      background: var(--switch-bg);
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .slider .circle {
+      top: calc(var(--circle-inset) * -1);
+      left: 0;
+      width: var(--circle-diameter);
+      height: var(--circle-diameter);
+      position: absolute;
+      background: var(--circle-bg);
+      border-radius: inherit;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHdpZHRoPSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj4KICAgIDxwYXRoIGZpbGw9IiNmZmYiCiAgICAgICAgZD0iTTkuMzA1IDEuNjY3VjMuNzVoMS4zODlWMS42NjdoLTEuMzl6bS00LjcwNyAxLjk1bC0uOTgyLjk4Mkw1LjA5IDYuMDcybC45ODItLjk4Mi0xLjQ3My0xLjQ3M3ptMTAuODAyIDBMMTMuOTI3IDUuMDlsLjk4Mi45ODIgMS40NzMtMS40NzMtLjk4Mi0uOTgyek0xMCA1LjEzOWE0Ljg3MiA0Ljg3MiAwIDAwLTQuODYyIDQuODZBNC44NzIgNC44NzIgMCAwMDEwIDE0Ljg2MiA0Ljg3MiA0Ljg3MiAwIDAwMTQuODYgMTAgNC44NzIgNC44NzIgMCAwMDEwIDUuMTM5em0wIDEuMzg5QTMuNDYyIDMuNDYyIDAgMDExMy40NzEgMTBhMy40NjIgMy40NjIgMCAwMS0zLjQ3MyAzLjQ3MkEzLjQ2MiAzLjQ2MiAwIDAxNi41MjcgMTAgMy40NjIgMy40NjIgMCAwMTEwIDYuNTI4ek0xLjY2NSA5LjMwNXYxLjM5aDIuMDgzdi0xLjM5SDEuNjY2em0xNC41ODMgMHYxLjM5aDIuMDg0di0xLjM5aC0yLjA4NHpNNS4wOSAxMy45MjhMMy42MTYgMTUuNGwuOTgyLjk4MiAxLjQ3My0xLjQ3My0uOTgyLS45ODJ6bTkuODIgMGwtLjk4Mi45ODIgMS40NzMgMS40NzMuOTgyLS45ODItMS40NzMtMS40NzN6TTkuMzA1IDE2LjI1djIuMDgzaDEuMzg5VjE2LjI1aC0xLjM5eiIgLz4KPC9zdmc+');
+      background-repeat: no-repeat;
+      background-position: center center;
+      -webkit-transition:
+        left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        -webkit-transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      -o-transition:
+        left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
       transition:
-        background-color var(--transDur) ease-in-out,
-        box-shadow 0.15s ease-in-out,
-        transform var(--transDur) ease-in-out;
+        left 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        -webkit-transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      box-shadow:
+        0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     }
 
-    .theme__toggle:before {
-      background-color: hsl(48, 90%, 55%);
-      border-radius: 50%;
+    .slider .circle::before {
       content: '';
-      width: 2.5em;
-      height: 2.5em;
-      transition: 0.3s;
-    }
-
-    .theme__toggle:focus {
-      box-shadow: 0 0 0 0.125em var(--primary);
-      outline: transparent;
-    }
-
-    /* Checked */
-    .theme__toggle:checked {
-      background-color: hsl(198, 90%, 15%);
-    }
-
-    .theme__toggle:checked:before,
-    .theme__toggle:checked ~ .theme__icon {
-      transform: translateX(3em);
-    }
-
-    .theme__toggle:checked:before {
-      background-color: hsl(198, 90%, 55%);
-    }
-
-    .theme__toggle:checked ~ .theme__fill {
-      transform: translateX(0);
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(1) {
-      box-shadow: 0.2em -0.2em 0 0.2em hsl(0, 0%, 100%) inset;
-      transform: scale(1);
-      top: 0.2em;
-      left: -0.2em;
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part ~ .theme__icon-part {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: inherit;
+      -webkit-transition: all 500ms;
+      -o-transition: all 500ms;
+      transition: all 500ms;
       opacity: 0;
     }
 
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(2) {
-      transform: rotate(45deg) translateY(0.8em);
+    /* actions */
+
+    .ui-switch input:checked + .slider .circle {
+      left: calc(100% - var(--circle-diameter));
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHdpZHRoPSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj4KICAgIDxwYXRoIGZpbGw9IiNmZmYiCiAgICAgICAgZD0iTTQuMiAyLjVsLS43IDEuOC0xLjguNyAxLjguNy43IDEuOC42LTEuOEw2LjcgNWwtMS45LS43LS42LTEuOHptMTUgOC4zYTYuNyA2LjcgMCAxMS02LjYtNi42IDUuOCA1LjggMCAwMDYuNiA2LjZ6IiAvPgo8L3N2Zz4=');
     }
 
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(3) {
-      transform: rotate(90deg) translateY(0.8em);
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(4) {
-      transform: rotate(135deg) translateY(0.8em);
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(5) {
-      transform: rotate(180deg) translateY(0.8em);
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(6) {
-      transform: rotate(225deg) translateY(0.8em);
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(7) {
-      transform: rotate(270deg) translateY(0.8em);
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(8) {
-      transform: rotate(315deg) translateY(0.8em);
-    }
-
-    .theme__toggle:checked ~ .theme__icon .theme__icon-part:nth-child(9) {
-      transform: rotate(360deg) translateY(0.8em);
-    }
-
-    .theme__toggle-wrap {
-      margin: 0 0.75em;
-    }
-
-    @supports selector(:focus-visible) {
-      .theme__toggle:focus {
-        box-shadow: 0 0 0 0.125em var(--primaryT);
-      }
-
-      .theme__toggle:focus-visible {
-        box-shadow: 0 0 0 0.125em var(--primary);
-      }
+    .ui-switch input:active + .slider .circle::before {
+      -webkit-transition: 0s;
+      -o-transition: 0s;
+      transition: 0s;
+      opacity: 1;
+      width: 0;
+      height: 0;
     }
   `;
   return (
-    <label htmlFor="theme" className="theme" css={innerStyle}>
-      <span className="theme__toggle-wrap">
+    <Div>
+      <label className="ui-switch" htmlFor="theme-switch">
         <input
-          checked={checked}
-          id="theme"
-          className="theme__toggle"
+          id="theme-switch"
+          name="theme-switch"
           type="checkbox"
-          role="switch"
-          name="theme"
-          value={value}
-          onChange={(e) => onChange(e.target.checked)}
+          checked={config[globalConfig.THEME] === 'dark'}
+          onChange={(e) => {
+            setGlobal((last) => ({
+              ...last,
+              [globalConfig.THEME]: e.target.checked ? 'dark' : 'light'
+            }));
+          }}
         />
-        <span className="theme__fill" />
-        <span className="theme__icon">
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-          <span className="theme__icon-part" />
-        </span>
-      </span>
-    </label>
+        <div className="slider">
+          <div className="circle"></div>
+        </div>
+      </label>
+    </Div>
   );
 }

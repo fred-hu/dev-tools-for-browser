@@ -10,7 +10,7 @@ temp.src = inject;
 temp.onload = async function () {
   // 向content xhr.ts 发消息更新PROXY_ROUTES 【加载完就同步-主动行为】
   const data = await store.getItem(STORE_KEY.ROUTES);
-  const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_SWITCH_CONFIG);
+  const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_CONFIG);
   const mockEnabled = config?.mock ?? false;
   window.postMessage({
     action: MESSAGE_TYPES.MATCHING_UPDATE,

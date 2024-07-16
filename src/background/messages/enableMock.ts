@@ -15,7 +15,7 @@ const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) 
     active: true,
   });
   const enableInTab = tab?.url?.startsWith('http');
-  const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_SWITCH_CONFIG);
+  const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_CONFIG);
   const mockEnabled = config?.mock ?? false;
   if (mockEnabled && enableInTab) {
     const tag = `mock-${windowId}-${tabId}`;

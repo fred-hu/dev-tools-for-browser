@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
-
-import { useStorage } from '@plasmohq/storage/hook';
-
-function IndexOptions(): React.ReactElement {
+import Provider from '~app/components/provider';
+import App from '~options/app';
+function AppProvider() {
   return (
-    <div
-      style={{
-        padding: 16,
-        minWidth: 400,
-      }}>
-      <h2>dev tools</h2>
-    </div>
+    <Provider>
+      <App />
+    </Provider>
   );
 }
 
-export default IndexOptions;
+export default AppProvider;

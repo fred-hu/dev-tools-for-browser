@@ -1,6 +1,8 @@
 import React from 'react';
 import html from 'url:./mock-record/index.html';
 
+import Provider from '~app/components/provider';
+
 import { log } from '../app/utils';
 import icon from '/assets/svg/devtool-icon.svg';
 
@@ -12,7 +14,11 @@ chrome.devtools.panels.create('Mock Record', icon.split('/').pop(), html.split('
 });
 
 function IndexDevtools() {
-  return <h2>devtools</h2>;
+  return (
+    <Provider>
+      <h2>devtools</h2>
+    </Provider>
+  );
 }
 
 export default IndexDevtools;

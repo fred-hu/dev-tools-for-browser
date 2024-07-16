@@ -1,9 +1,13 @@
+import { StyleProvider } from '@ant-design/cssinjs';
 import zhCN from 'antd/locale/zh_CN';
+
+import AppContext from '~app/context';
+import store, { globalConfig, STORE_KEY } from '~app/utils/store';
 
 import 'dayjs/locale/zh-cn';
 
-import { ConfigProvider } from 'antd';
-import React from 'react';
+import { ConfigProvider, theme } from 'antd';
+import React, { useEffect, useState, useMemo } from 'react';
 
 interface IProps {
   children?: React.ReactElement;
@@ -16,5 +20,42 @@ interface IProps {
  */
 export default function Provider(props: IProps): React.ReactElement {
   const { children } = props;
-  return <ConfigProvider locale={zhCN}>{children}</ConfigProvider>;
+  const [switchConfig, setSwitchConfig] = useState({});
+  const [global, setGlobal] = useState(null);
+  useEffect(() => {
+    store.get(STORE_KEY.GLOBAL_CONFIG).then((data: any) =>
+      setGlobal((last) => ({
+        ...last,
+        ...data,
+      }))
+    );
+    store.watch({
+      [STORE_KEY.GLOBAL_CONFIG]: (c) => {
+        setGlobal((last) => ({
+          ...last,
+          ...c.newValue,
+        }));
+      },
+    });
+  }, []);
+
+  const globalTheme = useMemo(() => {
+    return global?.[globalConfig.THEME];
+  }, [global?.[globalConfig.THEME]]);
+
+  useEffect(() => {
+    if (globalTheme) {
+      document.documentElement.setAttribute('data-theme', globalTheme);
+    }
+  }, [globalTheme]);
+
+  return global ? (
+    <ConfigProvider
+      locale={zhCN}
+      theme={{ algorithm: global?.[globalConfig.THEME] === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm }}>
+      <StyleProvider hashPriority="high">
+        <AppContext.Provider value={global}>{children}</AppContext.Provider>
+      </StyleProvider>
+    </ConfigProvider>
+  ) : null;
 }
