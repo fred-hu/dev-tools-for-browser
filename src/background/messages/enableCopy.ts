@@ -4,7 +4,7 @@ import { onTabCallback } from '../tools'
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
 import store, { STORE_KEY } from '~app/utils/store';
-
+import { WHITE_URLS } from '~app/constants';
 const injectMap = new Map();
 
 const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) => {
@@ -96,7 +96,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     });
     if (tab) {
       const { windowId, id, url } = tab;
-      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      if (url && (url.startsWith('http://') || url.startsWith('https://')) && !WHITE_URLS.some((v) => url?.includes(v))) {
         onTabCallback(id, () => {
           inject(windowId, id);
         })

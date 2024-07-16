@@ -247,6 +247,9 @@ export const DEFAULT_RESPONSE_HEADERS_KEYS = [
   'Warning', // A general warning about possible problems with the entity body
   'WWW-Authenticate', // Indicates the authentication scheme that should be used to access the requested entity
 ];
+
+export const WHITE_URLS = ['chromewebstore.google.com', 'marketplace.visualstudio.com']
+
 export default {
   PROXY_ROUTE_KEY,
   MOCK_TYPE,

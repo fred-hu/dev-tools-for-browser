@@ -2,7 +2,7 @@ import { debounce } from 'radash';
 
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import { GLOBAL_VARIABLE, GLOBAL_VARIABLE_MAP } from '~app/constants';
+import { GLOBAL_VARIABLE, WHITE_URLS } from '~app/constants';
 import store, { STORE_KEY } from '~app/utils/store';
 
 import { onTabCallback } from '../tools';
@@ -14,7 +14,7 @@ const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) 
   const [tab] = await chrome.tabs.query({
     active: true,
   });
-  const enableInTab = tab?.url?.startsWith('http');
+  const enableInTab = tab?.url?.startsWith('http') && !WHITE_URLS.some((v) => tab?.url?.includes(v));
   const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_CONFIG);
   const mockEnabled = config?.mock ?? false;
   if (mockEnabled && enableInTab) {
@@ -145,7 +145,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   const [tab] = await chrome.tabs.query({
     active: true,
   });
-  const enableInTab = tab?.url?.startsWith('http');
+  const enableInTab = tab?.url?.startsWith('http') && !WHITE_URLS.some((v) => tab?.url?.includes(v));
   if (enable && enableInTab) {
     // 当前tab即时启动
     const { windowId, id } = tab;

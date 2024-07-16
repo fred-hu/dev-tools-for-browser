@@ -57,7 +57,8 @@ Method 2: [dev-tools.zip](https://github.com/fred-hu/dev-tools-for-browser/relea
 
 ## Screenshots
 <p align="center">
-  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/panel.png" width="600"/>
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/light.png" width="400"/>
+  <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/dark.png" width="400"/>
 </p>
 <p align="center">
   <img src="https://github.com/fred-hu/dev-tools-for-browser/raw/main/assets/demo/mock.png" width="600"/>
