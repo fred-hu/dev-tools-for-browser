@@ -3,14 +3,14 @@ import { debounce } from 'radash';
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
 import { GLOBAL_VARIABLE, WHITE_URLS } from '~app/constants';
-import store, { STORE_KEY } from '~app/utils/store';
+import store, { STORE_KEY, dataStore } from '~app/utils/store';
 
 import { onTabCallback } from '../tools';
 
 const injectMap = new Map();
 
 const inject = debounce({ delay: 200 }, async (windowId: number, tabId: number) => {
-  const data = (await store.getItem(STORE_KEY.ROUTES)) || [];
+  const data = (await dataStore.getItem(STORE_KEY.ROUTES)) || [];
   const [tab] = await chrome.tabs.query({
     active: true,
   });

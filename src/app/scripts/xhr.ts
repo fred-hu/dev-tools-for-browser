@@ -95,6 +95,7 @@ import { jointUrl } from '~app/utils';
           break;
         }
         default: {
+          Object.defineProperty(this, 'responseText', { writable: true, value: response });
           break;
         }
       }

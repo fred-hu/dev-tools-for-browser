@@ -13,6 +13,8 @@ export enum STORE_KEY {
 export enum globalSwitchConfig {
   MOCK = 'mock',
   COPY = 'copy',
+  QR_CODE = 'qrCode',
+  JSON_TO_TS = 'jsonToTs',
 }
 
 export enum globalConfig {
@@ -33,13 +35,18 @@ const store = new Storage({
   copiedKeyList: [],
 });
 
-store.watch({
+const dataStore = new Storage({
+  area: 'local',
+  copiedKeyList: [],
+});
+
+dataStore.watch({
   [STORE_KEY.GROUPS]: (c) => {
     const map = {};
     (c?.newValue || []).forEach((element) => {
       map[element.value] = element.label;
     });
-    store.set(STORE_KEY.GROUPS_MAP, map);
+    dataStore.set(STORE_KEY.GROUPS_MAP, map);
   },
 });
 
@@ -55,5 +62,6 @@ export default store;
 
 export {
   store,
+  dataStore,
   initStore,
 }

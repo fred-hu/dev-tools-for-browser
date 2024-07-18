@@ -2,7 +2,7 @@ import type { PlasmoMessaging } from '@plasmohq/messaging';
 
 import type { PROXY_ROUTE_ITEM } from '~app/constants';
 import { MATCH_TYPE, MOCK_TYPE, PROXY_ROUTE_KEY, ResourceType, RuleActionType } from '~app/constants';
-import store, { STORE_KEY } from '~app/utils/store';
+import store, { STORE_KEY, dataStore } from '~app/utils/store';
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   const resourceTypes = [
@@ -23,7 +23,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     ResourceType.OBJECT,
   ];
 
-  const routes: PROXY_ROUTE_ITEM[] = (await store.getItem(STORE_KEY.ROUTES)) ?? [];
+  const routes: PROXY_ROUTE_ITEM[] = (await dataStore.getItem(STORE_KEY.ROUTES)) ?? [];
   const config: Record<string, boolean> = (await store.getItem(STORE_KEY.GLOBAL_CONFIG)) || {};
   const { mock } = config;
   const ruleRoutes =
