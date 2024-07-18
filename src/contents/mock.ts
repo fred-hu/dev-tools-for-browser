@@ -2,14 +2,14 @@ import type { PlasmoCSConfig } from 'plasmo';
 import inject from 'url:~app/scripts/xhr.ts';
 
 import { MESSAGE_TYPES } from '~app/constants';
-import store, { STORE_KEY } from '~app/utils/store';
+import store, { STORE_KEY, dataStore } from '~app/utils/store';
 
 const temp = document.createElement('script');
 temp.setAttribute('type', 'text/javascript');
 temp.src = inject;
 temp.onload = async function () {
   // 向content xhr.ts 发消息更新PROXY_ROUTES 【加载完就同步-主动行为】
-  const data = await store.getItem(STORE_KEY.ROUTES);
+  const data = await dataStore.getItem(STORE_KEY.ROUTES);
   const config: Record<string, boolean> = await store.get(STORE_KEY.GLOBAL_CONFIG);
   const mockEnabled = config?.mock ?? false;
   window.postMessage({
@@ -23,7 +23,7 @@ temp.onload = async function () {
 };
 document.documentElement.appendChild(temp);
 
-store.watch({
+dataStore.watch({
   [STORE_KEY.ROUTES]: (c) => {
     // 向content xhr.ts 发消息更新PROXY_ROUTES 【监听到数据变化就同步-主动行为】
     window.postMessage({

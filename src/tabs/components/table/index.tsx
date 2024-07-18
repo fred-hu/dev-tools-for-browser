@@ -16,9 +16,9 @@ import {
   REQUEST_TYPE_DICT,
 } from '~app/constants';
 import type { PROXY_ROUTE_ITEM } from '~app/constants';
-import { type GROUP_ITEM, GROUP_KEY } from '~app/constants/group';
-import store, { STORE_KEY } from '~app/utils/store';
-import type { TFilter } from '~tabs/mock';
+import { GROUP_KEY, type GROUP_ITEM } from '~app/constants/group';
+import store, { dataStore, STORE_KEY } from '~app/utils/store';
+import type { TFilter } from '~tabs/apps/mock';
 
 import s from './index.module.scss';
 
@@ -44,7 +44,13 @@ interface IProps {
 }
 const App: React.FC<IProps> = React.memo((props: IProps) => {
   const { dataSource, callback = () => {}, filter } = props;
-  const [groupMap] = useStorage(STORE_KEY.GROUPS_MAP, {});
+  const [groupMap] = useStorage(
+    {
+      key: STORE_KEY.GROUPS_MAP,
+      instance: dataStore,
+    },
+    {}
+  );
   const data: DataType[] = (dataSource || [])
     .map((v, i) => ({
       ...v,

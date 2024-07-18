@@ -42,7 +42,7 @@ import { GROUP_KEY } from '~app/constants/group';
 import type { GROUP_ITEM } from '~app/constants/group';
 import useGroupsStorage from '~app/hooks/useGroupsStorage';
 import { encryptDecrypt, moveToTop } from '~app/utils';
-import store, { STORE_KEY } from '~app/utils/store';
+import store, { dataStore, STORE_KEY } from '~app/utils/store';
 import EditGroup from '~tabs/components/drawer-group';
 import EditForm from '~tabs/components/mock-form';
 import MockTable from '~tabs/components/table';
@@ -79,7 +79,7 @@ const App: React.FC = () => {
   const [proxyRoutes, setProxyRoutes] = useStorage(
     {
       key: STORE_KEY.ROUTES,
-      instance: store,
+      instance: dataStore,
     },
     []
   );
@@ -92,7 +92,13 @@ const App: React.FC = () => {
   );
   const emptyGroupMocks = useRef(false);
   const [groups, setGroups] = useGroupsStorage();
-  const [groupMap] = useStorage(STORE_KEY.GROUPS_MAP, {});
+  const [groupMap] = useStorage(
+    {
+      key: STORE_KEY.GROUPS_MAP,
+      instance: dataStore,
+    },
+    {}
+  );
   const openNotificationWithIcon = (type: NotificationType, message, description) => {
     api[type]({
       message,
@@ -245,7 +251,8 @@ const App: React.FC = () => {
       case OPERATE_TYPE.CLONE: // 克隆
         proxyRoutes.splice(index + 1, 0, {
           ...mockConfig,
-          id: `${+new Date()}`,
+          [PROXY_ROUTE_KEY.ID]: `${+new Date()}`,
+          [PROXY_ROUTE_KEY.ENABLE]: false,
         });
         setProxyRoutes([...proxyRoutes]);
         message.success('克隆成功', 1);
