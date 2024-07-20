@@ -1,7 +1,7 @@
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import type { PopconfirmProps, TableColumnsType } from 'antd';
 import { Button, message, Popconfirm, Switch, Table, Tag, Tooltip, Typography } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { useStorage } from '@plasmohq/storage/hook';
 
@@ -17,6 +17,7 @@ import {
 } from '~app/constants';
 import type { PROXY_ROUTE_ITEM } from '~app/constants';
 import { GROUP_KEY, type GROUP_ITEM } from '~app/constants/group';
+import AppContext from '~app/context';
 import store, { dataStore, STORE_KEY } from '~app/utils/store';
 import type { TFilter } from '~tabs/apps/mock';
 
@@ -26,16 +27,6 @@ const { Paragraph, Text } = Typography;
 
 type DataType = PROXY_ROUTE_ITEM & Partial<{ id: string; index: number }>;
 
-// rowSelection object indicates the need for row selection
-const rowSelection = {
-  onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: (record: DataType) => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
-};
 interface IProps {
   dataSource: DataType[];
   filter: TFilter;
@@ -44,6 +35,7 @@ interface IProps {
 }
 const App: React.FC<IProps> = React.memo((props: IProps) => {
   const { dataSource, callback = () => {}, filter } = props;
+  const { setGlobal } = useContext<any>(AppContext);
   const [groupMap] = useStorage(
     {
       key: STORE_KEY.GROUPS_MAP,
@@ -209,24 +201,23 @@ const App: React.FC<IProps> = React.memo((props: IProps) => {
       ),
     },
   ];
-
+  // rowSelection object indicates the need for row selection
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+      setGlobal((last) => ({ ...last, selectedRowKeys }));
+    },
+    getCheckboxProps: (record: DataType) => ({
+      disabled: record.name === 'Default', // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
   return (
     <Provider>
-      {/* <Radio.Group
-        onChange={({ target: { value } }) => {
-          setSelectionType(value);
-        }}
-        value={selectionType}
-      >
-        <Radio value="checkbox">Checkbox</Radio>
-        <Radio value="radio">radio</Radio>
-      </Radio.Group> */}
-
       <Table
-        // rowSelection={{
-        //   type: selectionType,
-        //   ...rowSelection,
-        // }}
+        rowSelection={{
+          type: 'checkbox',
+          ...rowSelection,
+        }}
         columns={columns}
         rowKey={PROXY_ROUTE_KEY.ID}
         dataSource={data}

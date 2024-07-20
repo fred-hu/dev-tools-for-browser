@@ -7,7 +7,7 @@ import store, { globalConfig, STORE_KEY } from '~app/utils/store';
 import 'dayjs/locale/zh-cn';
 
 import { ConfigProvider, theme } from 'antd';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 interface IProps {
   children?: React.ReactElement;
@@ -20,7 +20,6 @@ interface IProps {
  */
 export default function Provider(props: IProps): React.ReactElement {
   const { children } = props;
-  const [switchConfig, setSwitchConfig] = useState({});
   const [global, setGlobal] = useState(null);
   useEffect(() => {
     store.get(STORE_KEY.GLOBAL_CONFIG).then((data: any) =>
@@ -54,7 +53,7 @@ export default function Provider(props: IProps): React.ReactElement {
       locale={zhCN}
       theme={{ algorithm: global?.[globalConfig.THEME] === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm }}>
       <StyleProvider hashPriority="high">
-        <AppContext.Provider value={global}>{children}</AppContext.Provider>
+        <AppContext.Provider value={{ ...global, setGlobal }}>{children}</AppContext.Provider>
       </StyleProvider>
     </ConfigProvider>
   ) : null;

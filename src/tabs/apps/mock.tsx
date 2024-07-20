@@ -3,6 +3,7 @@ import {
   ClearOutlined,
   CloseOutlined,
   CoffeeOutlined,
+  DeleteOutlined,
   DownloadOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
@@ -28,7 +29,9 @@ import {
   theme,
   Typography,
 } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+
+import AppContext from '~app/context';
 
 import '~app/styles/tailwind.scss';
 import '~tabs/styles/mock.css';
@@ -59,6 +62,7 @@ const App: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG, colorBgLayout },
   } = theme.useToken();
+  const { selectedRowKeys, setGlobal } = useContext<any>(AppContext);
   const formWidth = 680;
   const fileInputRef = useRef(null);
   const [api, notificationContextHolder] = notification.useNotification();
@@ -426,7 +430,12 @@ const App: React.FC = () => {
                 全局已禁用MOCK功能
               </Text>
             )}
-            <Button type="primary" icon={<DownloadOutlined />} size={'middle'} onClick={handleExport}>
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
+              size={'middle'}
+              onClick={handleExport}
+              disabled={!proxyRoutes.length}>
               导出
             </Button>
             <Button
@@ -440,6 +449,7 @@ const App: React.FC = () => {
             </Button>
             <Dropdown.Button
               size="middle"
+              disabled={!proxyRoutes.length}
               style={{ width: 140 }}
               menu={{
                 items: [
@@ -551,6 +561,64 @@ const App: React.FC = () => {
                 }>
                 编辑当前分组
               </Button>
+              {selectedRowKeys?.length ? (
+                <>
+                  <Button
+                    type="default"
+                    icon={<CloseOutlined />}
+                    onClick={() => {
+                      setProxyRoutes(
+                        proxyRoutes.map((item) => ({
+                          ...item,
+                          [PROXY_ROUTE_KEY.ENABLE]: selectedRowKeys.includes(item.id)
+                            ? false
+                            : item[PROXY_ROUTE_KEY.ENABLE],
+                        }))
+                      );
+                      message.success('操作成功', 1);
+                    }}>
+                    禁用
+                  </Button>
+                  <Button
+                    type="default"
+                    icon={<CheckOutlined />}
+                    onClick={() => {
+                      setProxyRoutes(
+                        proxyRoutes.map((item) => ({
+                          ...item,
+                          [PROXY_ROUTE_KEY.ENABLE]: selectedRowKeys.includes(item.id)
+                            ? true
+                            : item[PROXY_ROUTE_KEY.ENABLE],
+                        }))
+                      );
+                      message.success('操作成功', 1);
+                    }}>
+                    启用
+                  </Button>
+                  <Button
+                    type="default"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => {
+                      modal.confirm({
+                        title: `确认删除所选?`,
+                        centered: true,
+                        icon: <ExclamationCircleOutlined />,
+                        content: null,
+                        okText: '确认',
+                        cancelText: '取消',
+                        onOk: () => {
+                          setProxyRoutes(proxyRoutes.filter((item) => !selectedRowKeys.includes(item.id)));
+                          setGlobal((last) => ({ ...last, selectedRowKeys: [] }));
+                          message.success('操作成功', 1);
+                        },
+                        onCancel: () => {},
+                      });
+                    }}>
+                    删除
+                  </Button>
+                </>
+              ) : null}
             </Space>
             <Space size={50}>
               <Select
